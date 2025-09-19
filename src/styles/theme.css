@@ -1,0 +1,243 @@
+/*:root {*/
+/*    !* Brand *!*/
+/*    --brand-1: #EDF1FF;*/
+/*    --brand-2: #C7D4FF;*/
+/*    --brand-3: #A0B6FF;*/
+/*    --brand-4: #7998FF;*/
+/*    --color-brand-5: #4F76F6;*/
+/*    --brand-6: #3A5ED4;*/
+/*    --brand-7: #2949B2;*/
+/*    --brand-8: #1A3690;*/
+/*    --brand-9: #0F256E;*/
+/*    --brand-10: #07174C;*/
+
+/*    !* Secondary *!*/
+/*    --secondary-1: #FFEDE8;*/
+/*    --secondary-2: #FFC6B5;*/
+/*    --secondary-3: #FF9F82;*/
+/*    --secondary-4: #FF784F;*/
+/*    --secondary-5: #FB501B;*/
+/*    --secondary-6: #D93B0A;*/
+/*    --secondary-7: #B72B00;*/
+/*    --secondary-8: #952300;*/
+/*    --secondary-9: #731B00;*/
+/*    --secondary-10: #511300;*/
+
+/*    !* Light Neutral *!*/
+/*    --neutral-1: #FFFFFF;*/
+/*    --neutral-2: #F6F8FA;*/
+/*    --neutral-3: #EFF2F5;*/
+/*    --neutral-4: #E6EAEF;*/
+/*    --neutral-5: #E0E6EB;*/
+/*    --neutral-6: #DAE0E7;*/
+/*    --neutral-7: #D1D9E0;*/
+/*    --neutral-8: #C8D1DA;*/
+/*    --neutral-9: #818D98;*/
+/*    --neutral-10: #5C6670;*/
+/*    --neutral-11: #454D54;*/
+/*    ---neutral-12: #394046;*/
+/*    ---neutral-13: #252A2E;*/
+/*    --neutral-14: #1F2328;*/
+
+/*    !* Semantic Color *!*/
+/*    !* Success *!*/
+/*    --success-1: #F0FDF5;*/
+/*    --success-2: #DCFCE8;*/
+/*    --success-3: #BBF7D1;*/
+/*    --success-4: #86EFAD;*/
+/*    --success-5: #4ADE80;*/
+/*    --success-6: #22C55E;*/
+/*    --success-7: #16A34A;*/
+/*    --success-8: #15803C;*/
+/*    --success-9: #166533;*/
+/*    --success-10: #14532B;*/
+/*    --success-11: #052E14;*/
+
+/*    !* Warning *!*/
+/*    --warning-1: #FFFBEB;*/
+/*    --warning-2: #FDF4C8;*/
+/*    --warning-3: #FCE68B;*/
+/*    --warning-4: #FAD44F;*/
+/*    --warning-5: #F9C026;*/
+/*    --warning-6: #EA9A0C;*/
+/*    --warning-7: #D77908;*/
+/*    --warning-8: #B2550B;*/
+/*    --warning-9: #91410F;*/
+/*    --warning-10: #773610;*/
+/*    --warning-11: #441B04;*/
+
+/*    !*  Error *!*/
+/*    --error-1: #FEF2F2;*/
+/*    --error-2: #FEE2E2;*/
+/*    --error-3: #FECACA;*/
+/*    --error-4: #FCA5A5;*/
+/*    --error-5: #F87171;*/
+/*    --error-6: #EF4444;*/
+/*    --error-7: #DC2626;*/
+/*    --error-8: #B91C1C;*/
+/*    --error-9: #991B1B;*/
+/*    --error-10: #7F1D1D;*/
+/*    --error-11: #450A0A;*/
+
+/*    !* Information *!*/
+/*    --info-1: #EFF5FF;*/
+/*    --info-2: #DBE8FE;*/
+/*    --info-3: #BFD7FE;*/
+/*    --info-4: #93BBFD;*/
+/*    --color-info-5: #609AFA;*/
+/*    --info-6: #3B82F6;*/
+/*    --info-7: #2570EB;*/
+/*    --info-8: #1D64D8;*/
+/*    --info-9: #1E55AF;*/
+/*    --info-10: #1E478A;*/
+/*    --info-11: #172E54;*/
+
+/*    !* Display Color *!*/
+/*    !* Purple *!*/
+/*    --purple-1: #FAF5FF;*/
+/*    --purple-2: #F4E8FF;*/
+/*    --purple-3: #EBD5FF;*/
+/*    --purple-4: #DAB4FE;*/
+/*    --purple-5: #C184FC;*/
+/*    --purple-6: #A855F7;*/
+/*    --purple-7: #9133EA;*/
+/*    --purple-8: #7A22CE;*/
+/*    --purple-9: #6621A8;*/
+/*    --purple-10: #531C87;*/
+/*    --purple-11: #370764;*/
+
+/*    !* Pink *!*/
+/*    --pink-1: #FDF2F7;*/
+/*    --pink-2: #FCE7F1;*/
+/*    --pink-3: #FBCFE5;*/
+/*    --pink-4: #F9A8D0;*/
+/*    --pink-5: #F472B2;*/
+/*    --pink-6: #EC4899;*/
+/*    --pink-7: #DB2780;*/
+/*    --pink-8: #BE186A;*/
+/*    --pink-9: #9D1759;*/
+/*    --pink-10: #83184D;*/
+/*    --pink-11: #50072B;*/
+/*}*/
+
+/*:root[class~='dark'] {*/
+/*    !* Brand *!*/
+/*    --brand-1: #EDF1FF;*/
+/*    --brand-2: #C7D4FF;*/
+/*    --brand-3: #A0B6FF;*/
+/*    --brand-4: #7998FF;*/
+/*    --brand-5: #4F76F6;*/
+/*    --brand-6: #3A5ED4;*/
+/*    --brand-7: #2949B2;*/
+/*    --brand-8: #1A3690;*/
+/*    --brand-9: #0F256E;*/
+/*    --brand-10: #07174C;*/
+
+/*    !* Secondary *!*/
+/*    --secondary-1: #FFEDE8;*/
+/*    --secondary-2: #FFC6B5;*/
+/*    --secondary-3: #FF9F82;*/
+/*    --secondary-4: #FF784F;*/
+/*    --secondary-5: #FB501B;*/
+/*    --secondary-6: #D93B0A;*/
+/*    --secondary-7: #B72B00;*/
+/*    --secondary-8: #952300;*/
+/*    --secondary-9: #731B00;*/
+/*    --secondary-10: #511300;*/
+
+/*    !* Dark Neutral *!*/
+/*    --neutral-1: #010409;*/
+/*    --neutral-2: #0D1117;*/
+/*    --neutral-3: #151B23;*/
+/*    --neutral-4: #212830;*/
+/*    --neutral-5: #262C36;*/
+/*    --neutral-6: #2A313C;*/
+/*    --neutral-7: #2F3742;*/
+/*    --neutral-8: #3D444D;*/
+/*    --neutral-9: #656C76;*/
+/*    --neutral-10: #838B95;*/
+/*    --neutral-11: #B7BDC8;*/
+/*    --neutral-12: #D1D7E0;*/
+/*    --neutral-13: #F0F6FC;*/
+/*    --neutral-14: #FFFFFF;*/
+
+/*    !* Semantic Color *!*/
+/*    !* Success *!*/
+/*    --success-1: #F0FDF5;*/
+/*    --success-2: #DCFCE8;*/
+/*    --success-3: #BBF7D1;*/
+/*    --success-4: #86EFAD;*/
+/*    --success-5: #4ADE80;*/
+/*    --success-6: #22C55E;*/
+/*    --success-7: #16A34A;*/
+/*    --success-8: #15803C;*/
+/*    --success-9: #166533;*/
+/*    --success-10: #14532B;*/
+/*    --success-11: #052E14;*/
+
+/*    !* Warning *!*/
+/*    --warning-1: #FFFBEB;*/
+/*    --warning-2: #FDF4C8;*/
+/*    --warning-3: #FCE68B;*/
+/*    --warning-4: #FAD44F;*/
+/*    --warning-5: #F9C026;*/
+/*    --warning-6: #EA9A0C;*/
+/*    --warning-7: #D77908;*/
+/*    --warning-8: #B2550B;*/
+/*    --warning-9: #91410F;*/
+/*    --warning-10: #773610;*/
+/*    --warning-11: #441B04;*/
+
+/*    !*  Error *!*/
+/*    --error-1: #FEF2F2;*/
+/*    --error-2: #FEE2E2;*/
+/*    --error-3: #FECACA;*/
+/*    --error-4: #FCA5A5;*/
+/*    --error-5: #F87171;*/
+/*    --error-6: #EF4444;*/
+/*    --error-7: #DC2626;*/
+/*    --error-8: #B91C1C;*/
+/*    --error-9: #991B1B;*/
+/*    --error-10: #7F1D1D;*/
+/*    --error-11: #450A0A;*/
+
+/*    !* Information *!*/
+/*    --info-1: #EFF5FF;*/
+/*    --info-2: #DBE8FE;*/
+/*    --info-3: #BFD7FE;*/
+/*    --info-4: #93BBFD;*/
+/*    --info-5: #609AFA;*/
+/*    --info-6: #3B82F6;*/
+/*    --info-7: #2570EB;*/
+/*    --info-8: #1D64D8;*/
+/*    --info-9: #1E55AF;*/
+/*    --info-10: #1E478A;*/
+/*    --info-11: #172E54;*/
+
+/*    !* Display Color *!*/
+/*    !* Purple *!*/
+/*    --purple-1: #FAF5FF;*/
+/*    --purple-2: #F4E8FF;*/
+/*    --purple-3: #EBD5FF;*/
+/*    --purple-4: #DAB4FE;*/
+/*    --purple-5: #C184FC;*/
+/*    --purple-6: #A855F7;*/
+/*    --purple-7: #9133EA;*/
+/*    --purple-8: #7A22CE;*/
+/*    --purple-9: #6621A8;*/
+/*    --purple-10: #531C87;*/
+/*    --purple-11: #370764;*/
+
+/*    !* Pink *!*/
+/*    --pink-1: #FDF2F7;*/
+/*    --pink-2: #FCE7F1;*/
+/*    --pink-3: #FBCFE5;*/
+/*    --pink-4: #F9A8D0;*/
+/*    --pink-5: #F472B2;*/
+/*    --pink-6: #EC4899;*/
+/*    --pink-7: #DB2780;*/
+/*    --pink-8: #BE186A;*/
+/*    --pink-9: #9D1759;*/
+/*    --pink-10: #83184D;*/
+/*    --pink-11: #50072B;*/
+/*}*/

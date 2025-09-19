@@ -1,0 +1,13 @@
+/* 1) nếu muốn load Google Fonts via CSS import (Storybook sẽ tải) */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap');
+
+/* 2) define CSS var used across project */
+:root {
+    --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+}
+
+/* optional: ensure preview containers pick it up */
+html, body, .sb-show-main {
+    font-family: var(--font-sans) !important;
+}
