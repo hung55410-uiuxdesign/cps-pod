@@ -34,7 +34,7 @@ export function Editor({
     onHtmlChange?: (html: string) => void
 }) {
     return (
-        <div className="bg-background overflow-hidden rounded-lg border shadow">
+        <div className="bg-background overflow-hidden rounded-lg border-[0.5px] border-line">
             <LexicalComposer
                 initialConfig={{
                     ...editorConfig,

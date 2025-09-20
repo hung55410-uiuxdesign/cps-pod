@@ -63,7 +63,7 @@ export default function CreatePBasicsInfo({ onNextStepAction }: Props) {
     };
 
     const handleNext = async () => {
-        const isStepValid = await trigger(["title", "images", "category_id", "price", "status"]);
+        const isStepValid = await trigger([]);
         if (isStepValid && onNextStepAction) {
             onNextStepAction();
         }
@@ -210,7 +210,7 @@ export default function CreatePBasicsInfo({ onNextStepAction }: Props) {
 
             <div className={'col-span-2 w-full flex items-center justify-between'}>
                 <div />
-                <Button type="button" onClick={handleNext} className={'w-fit rounded-xl h-10 text-tx-default'}>
+                <Button type="button" onClick={handleNext} className={'w-fit rounded-xl h-10 text-tx-foreground'}>
                     Tiếp tục
                 </Button>
             </div>

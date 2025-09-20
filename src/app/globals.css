@@ -29,6 +29,7 @@ html, body {
     --color-badge: var(--error-6);
 
     --color-tx-default: var(--neutral-13);
+    --color-tx-foreground: var(--neutral-1);
     --color-tx-muted: var(--neutral-12);
     --color-tx-secondary: var(--neutral-10);
     --color-tx-disabled: var(--neutral-9);

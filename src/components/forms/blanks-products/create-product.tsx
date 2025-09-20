@@ -100,7 +100,7 @@ export default function CreateProduct() {
                         </TabsContent>
                     ))}
                 </Tabs>
-                <button type={'submit'}>Submit</button>
+                {/*<button type={'submit'}>Submit</button>*/}
             </form>
         </FormProvider>
     )

@@ -1,5 +1,6 @@
 import CreatePBasicsInfo from "@/components/forms/blanks-products/tab-contents/create-p-BasicsInfo";
 import CreatePImageDescription from "@/components/forms/blanks-products/tab-contents/create-p-Image&Description";
+import CreatePAddAttributes from "@/components/forms/blanks-products/tab-contents/create-p-AddAttributes";
 
 type TabType = {
     name: string;
@@ -21,7 +22,7 @@ export const TabsData: TabType[] = [
     {
         name: "Thuộc tính",
         value: "attributes",
-        content: () => <p>This is content 3</p>
+        content: ({ onNextStep, onPrevStep }) => <CreatePAddAttributes onNextStepAction={onNextStep} onPrevStepAction={onPrevStep} />
     },
     {
         name: "Mặt in",
