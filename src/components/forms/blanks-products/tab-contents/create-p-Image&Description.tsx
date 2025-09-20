@@ -14,42 +14,12 @@ type Props = {
     onPrevStepAction?: () => void;
 };
 
-const initialValue = {
-    root: {
-        children: [
-            {
-                children: [
-                    {
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Hello World 🚀',
-                        type: 'text',
-                        version: 1,
-                    },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                type: 'paragraph',
-                version: 1,
-            },
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1,
-    },
-} as unknown as SerializedEditorState
-
 export default function CreatePImageDescription({onNextStepAction, onPrevStepAction}: Props) {
     const {setValue, watch, trigger, control} = useFormContext();
     const [previewDescription, setPreviewDescription] = useState<string>("edit");
-    const [editorState, setEditorState] = useState<SerializedEditorState>(initialValue)
 
     const description: string = watch('description');
+    const descriptionState: SerializedEditorState = watch('descriptionState');
 
     const handleNext = async () => {
         const isStepValid = await trigger([]);
@@ -112,9 +82,9 @@ export default function CreatePImageDescription({onNextStepAction, onPrevStepAct
                         <FormControl>
                             {previewDescription === "edit" ? (
                                 <Editor
-                                    editorSerializedState={editorState}
+                                    editorSerializedState={descriptionState}
                                     onHtmlChange={field.onChange}
-                                    onSerializedChange={(value) => setEditorState(value)}
+                                    onSerializedChange={(val) => setValue("descriptionState", val)}
                                 />
                             ) : (
                                 <div

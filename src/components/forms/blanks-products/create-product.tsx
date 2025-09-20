@@ -7,6 +7,37 @@ import {FormProvider, useForm} from "react-hook-form";
 import {useState} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button";
+import {SerializedEditorState} from "lexical";
+
+const initialValue = {
+    root: {
+        children: [
+            {
+                children: [
+                    {
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: '',
+                        type: 'text',
+                        version: 1,
+                    },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                type: 'paragraph',
+                version: 1,
+            },
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1,
+    },
+} as unknown as SerializedEditorState
 
 const AttributeSchema = z.object({
     attr_id: z.number().optional(),
@@ -51,6 +82,7 @@ const formSchema = z.object({
     description: z.string().nonempty({
         message: "Mô tả không được để trống",
     }),
+    descriptionState: z.any().optional(),
     attributes: z.array(AttributeSchema),
     attribute_values: z.array(AttributeValueSchema).optional(),
 });
@@ -71,14 +103,17 @@ export default function CreateProduct() {
             description: "",
             attributes: [],
             attribute_values: [],
+            descriptionState: initialValue,
         },
         mode: "onBlur",
         resolver: zodResolver(formSchema),
     });
 
     const onSubmit = (data: FormValueType) => {
-        console.log("✅ Form submit thành công", data);
-    };
+        const { descriptionState, ...rest } = data
+        console.log("✅ Form submit thành công", rest)
+    }
+
 
     const onError = (errors: any) => {
         console.log("❌ Form submit lỗi", errors);
