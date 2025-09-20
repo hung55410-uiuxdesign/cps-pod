@@ -1,22 +1,53 @@
 'use client'
 
-import {InputFieldWidgets} from "@/components/features/widgets/InputFieldWidgets";
 import {Button} from "@/components/ui/button"
 import {useFormContext} from "react-hook-form";
-import {Eye, Grid, List, PenLine, XCircle} from "lucide-react";
+import {Eye, PenLine} from "lucide-react";
 import {Editor} from "@/components/blocks/editor-x/editor";
 import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import { useState } from "react";
 import {SortableImageInputWidget} from "@/components/features/widgets/SortableImageInputWidget";
+import { SerializedEditorState } from 'lexical'
 
 type Props = {
     onNextStepAction?: () => void;
     onPrevStepAction?: () => void;
 };
 
+const initialValue = {
+    root: {
+        children: [
+            {
+                children: [
+                    {
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: 'Hello World 🚀',
+                        type: 'text',
+                        version: 1,
+                    },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                type: 'paragraph',
+                version: 1,
+            },
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'root',
+        version: 1,
+    },
+} as unknown as SerializedEditorState
+
 export default function CreatePImageDescription({onNextStepAction, onPrevStepAction}: Props) {
     const {setValue, watch, trigger, control} = useFormContext();
     const [previewDescription, setPreviewDescription] = useState<string>("edit");
+    const [editorState, setEditorState] = useState<SerializedEditorState>(initialValue)
 
     const description: string = watch('description');
 
@@ -81,8 +112,9 @@ export default function CreatePImageDescription({onNextStepAction, onPrevStepAct
                         <FormControl>
                             {previewDescription === "edit" ? (
                                 <Editor
-                                    editorSerializedState={undefined}
+                                    editorSerializedState={editorState}
                                     onHtmlChange={field.onChange}
+                                    onSerializedChange={(value) => setEditorState(value)}
                                 />
                             ) : (
                                 <div

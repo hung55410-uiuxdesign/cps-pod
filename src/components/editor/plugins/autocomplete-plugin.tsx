@@ -84,9 +84,9 @@ function $search(selection: null | BaseSelection): [boolean, string] {
 function useQuery(): (searchText: string) => SearchPromise {
   return useCallback((searchText: string) => {
     const server = new AutocompleteServer()
-    console.time("query")
+    // console.time("query")
     const response = server.query(searchText)
-    console.timeEnd("query")
+    // console.timeEnd("query")
     return response
   }, [])
 }

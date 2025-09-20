@@ -59,7 +59,6 @@ const SortableItem = ({ item, onRemoveImage }: { item: ImageItem, onRemoveImage:
             />
             <Button
                 onClick={() => {
-                    console.log(item.id)
                     onRemoveImage(item.id)
                 }}
                 data-dnd-ignore-drag
@@ -72,52 +71,43 @@ const SortableItem = ({ item, onRemoveImage }: { item: ImageItem, onRemoveImage:
 };
 
 type Props = {
-    value: ImageItem[];
-    onChange: (value: ImageItem[]) => void;
+    value: string[];
+    onChange: (value: string[]) => void;
 };
 
 export const SortableImageInputWidget = ({ value, onChange }: Props) => {
-    const images = value || [];
+    const images: ImageItem[] = (value || []).map((url, index) => ({
+        id: generateUniqueId(url + index),
+        url,
+    }))
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
-            activationConstraint: {
-                delay: 250,
-                tolerance: 10
-            }
+            activationConstraint: { delay: 250, tolerance: 10 },
         }),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
-        })
-    );
+        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+    )
 
     const handleDragEnd = (event: DragEndEvent) => {
-        const { active, over } = event;
-
+        const { active, over } = event
         if (over && active.id !== over.id) {
-            const oldIndex = images.findIndex(item => item.id === active.id);
-            const newIndex = images.findIndex(item => item.id === over.id);
-
+            const oldIndex = images.findIndex(item => item.id === active.id)
+            const newIndex = images.findIndex(item => item.id === over.id)
             if (oldIndex !== -1 && newIndex !== -1) {
-                const newImages = arrayMove(images, oldIndex, newIndex);
-                onChange(newImages);
+                const newImages = arrayMove(images, oldIndex, newIndex)
+                onChange(newImages.map(img => img.url))
             }
         }
-    };
+    }
 
     const handleUrlSelect = (url: string) => {
-        const newImageItem: ImageItem = {
-            id: generateUniqueId(url),
-            url: url
-        };
-        const newImages = [...(images), newImageItem];
-        onChange(newImages);
-    };
+        onChange([...(value || []), url])
+    }
 
     const handleRemoveImage = (idToRemove: string) => {
-        const newImages = images.filter(item => item.id !== idToRemove);
-        onChange(newImages);
-    };
+        const newImages = images.filter(item => item.id !== idToRemove)
+        onChange(newImages.map(img => img.url))
+    }
 
     return (
         <DndContext
@@ -130,12 +120,8 @@ export const SortableImageInputWidget = ({ value, onChange }: Props) => {
                 strategy={verticalListSortingStrategy}
             >
                 <div className="grid grid-cols-6 gap-4">
-                    {images.map((item) => (
-                        <SortableItem
-                            key={item.id}
-                            item={item}
-                            onRemoveImage={handleRemoveImage}
-                        />
+                    {images.map(item => (
+                        <SortableItem key={item.id} item={item} onRemoveImage={handleRemoveImage} />
                     ))}
                     <InputFieldWidgets
                         type="url"

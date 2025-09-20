@@ -6,6 +6,20 @@ import {z} from "zod";
 import {FormProvider, useForm} from "react-hook-form";
 import {useState} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {Button} from "@/components/ui/button";
+
+const AttributeSchema = z.object({
+    attr_id: z.number().optional(),
+    name: z.string(),
+})
+
+const AttributeValueSchema = z.object({
+    title: z.string(),
+    prop_id: z.number(),
+    title_id: z.string(),
+    prop_name: z.string(),
+    properties: z.string(),
+});
 
 const formSchema = z.object({
     title: z.string().min(2, {
@@ -36,7 +50,9 @@ const formSchema = z.object({
     }),
     description: z.string().nonempty({
         message: "Mô tả không được để trống",
-    })
+    }),
+    attributes: z.array(AttributeSchema),
+    attribute_values: z.array(AttributeValueSchema).optional(),
 });
 
 type FormValueType = z.infer<typeof formSchema>;
@@ -52,14 +68,20 @@ export default function CreateProduct() {
             category_id: "",
             price: "0",
             status: "active",
-            description: ""
+            description: "",
+            attributes: [],
+            attribute_values: [],
         },
         mode: "onBlur",
         resolver: zodResolver(formSchema),
     });
 
     const onSubmit = (data: FormValueType) => {
-        console.log("Dữ liệu toàn bộ form:", data);
+        console.log("✅ Form submit thành công", data);
+    };
+
+    const onError = (errors: any) => {
+        console.log("❌ Form submit lỗi", errors);
     };
 
     const handleNextStep = () => {
@@ -78,7 +100,7 @@ export default function CreateProduct() {
 
     return (
         <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit, onError)}>
                 <Tabs value={activeTab} defaultValue={defaultValue} className="w-full">
                     <TabsList className={'bg-transparent border-b-[0.5px] border-line w-full justify-start rounded-none p-0 h-fit gap-3 mb-6'}>
                         {TabsData.map((tab) => (
@@ -100,7 +122,7 @@ export default function CreateProduct() {
                         </TabsContent>
                     ))}
                 </Tabs>
-                {/*<button type={'submit'}>Submit</button>*/}
+                <Button type={'submit'} className={'mt-8'}>Submit</Button>
             </form>
         </FormProvider>
     )
