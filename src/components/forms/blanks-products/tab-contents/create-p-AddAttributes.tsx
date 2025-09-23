@@ -2,6 +2,7 @@
 
 import {Button} from "@/components/ui/button";
 import {useFormContext, useFieldArray} from "react-hook-form";
+import {Separator} from "@/components/ui/separator";
 import {
     FormControl,
     FormField,
@@ -10,6 +11,8 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import {InputFieldWidgets} from "@/components/features/widgets/InputFieldWidgets";
+import CreatePAddAttributeValues from "@/components/forms/blanks-products/tab-contents/create-p-AddAttributeValues";
+import Empty from "@/components/utils/Empty";
 
 type Props = {
     onNextStepAction?: () => void;
@@ -17,76 +20,96 @@ type Props = {
 };
 
 export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction}: Props) {
-    const { control, trigger, register } = useFormContext()
-    const { fields, append, remove } = useFieldArray({
+    const { control, trigger } = useFormContext();
+
+    const { fields: attributeFields, append: appendAttribute, remove: removeAttribute } = useFieldArray({
         control,
         name: "attributes"
-    })
+    });
 
     const handleNext = async () => {
-        const isStepValid = await trigger();
-        if (isStepValid && onNextStepAction) {
-            onNextStepAction();
-        }
+        // const isStepValid = await trigger([]);
+        // if (isStepValid && onNextStepAction) {
+        //     onNextStepAction();
+        // }
+
+        if(onNextStepAction) onNextStepAction();
     };
 
     const handlePreStep = () => {
-        if (onPrevStepAction) {
-            onPrevStepAction();
-        }
+        if (onPrevStepAction) onPrevStepAction();
     };
+
     return (
-        <div className={'flex flex-col gap-8'}>
-            <div className={'flex flex-col border-[0.5px] border-line rounded-xl overflow-hidden'}>
-                <div className={'flex flex-row gap-3 items-center justify-between bg-muted p-3 border-b-[0.5px] border-line'}>
-                    <p className={'font-semibold text-tx-default'}>Thuộc tính</p>
+        <div className="flex flex-col gap-8">
+            <div className="flex flex-col border-[0.5px] border-line rounded-xl overflow-hidden">
+                <div className="flex flex-row gap-3 items-center justify-between bg-muted p-3 border-b-[0.5px] border-line">
+                    <p className="font-semibold text-tx-default">Thuộc tính</p>
                     <Button
                         className="h-10 rounded-xl"
                         type="button"
                         onClick={() =>
-                            append({
-                                attr_id: Date.now() % 100000 + Math.floor(Math.random() * 1000),
+                            appendAttribute({
+                                attr_id: Date.now(),
                                 name: "",
+                                values: []
                             })
                         }
                     >
                         Thêm thuộc tính
                     </Button>
                 </div>
-                <div className="flex flex-col gap-3">
-                    {fields.map((field, index) => (
-                        <div key={field.id} className="flex items-center gap-3">
-                            <FormField
-                                control={control}
-                                name={`attributes.${index}.name`}
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                        <FormLabel>Tên thuộc tính</FormLabel>
-                                        <FormControl>
-                                            <InputFieldWidgets placeholder="Nhập tên thuoc tinh" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                <div className="flex flex-col gap-3 px-6 py-4">
+                    {attributeFields.length > 0 ? (
+                        attributeFields.map((attr, attrIndex) => (
+                            <div key={attrIndex} className="flex flex-col gap-3">
+                                <div className="grid grid-cols-2 gap-6 py-3">
+                                    <FormField
+                                        control={control}
+                                        name={`attributes.${attrIndex}.name`}
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormLabel>Tên thuộc tính</FormLabel>
+                                                <FormControl>
+                                                    <InputFieldWidgets placeholder="Nhập tên thuộc tính" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
 
-                            <Button
-                                type="button"
-                                variant="outline"
-                                className="rounded-xl h-10"
-                                onClick={() => remove(index)}
-                            >
-                                Xóa
-                            </Button>
-                        </div>
-                    ))}
+                                    <CreatePAddAttributeValues attrIndex={attrIndex} />
+
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        className="rounded-xl h-10 max-w-[250px]"
+                                        onClick={() => removeAttribute(attrIndex)}
+                                    >
+                                        Xóa thuộc tính
+                                    </Button>
+                                </div>
+                                {attrIndex < attributeFields.length - 1 && <Separator />}
+                            </div>
+                        ))
+                    ) : (
+                        <Empty
+                            title="Chưa có thuộc tính"
+                            caption="Hãy thêm thuộc tính đầu tiên của bạn."
+                            action={{
+                                label: "Tạo Attribute",
+                                onClick: () => console.log("Create attribute clicked"),
+                            }}
+                        />
+                    )}
                 </div>
             </div>
-            <div className={'w-full flex items-center justify-between mt-8'}>
-                <Button type="button" variant={"outline"} onClick={handlePreStep} className={'w-fit rounded-xl h-10'}>
+
+            <div className="w-full flex items-center justify-between mt-8">
+                <Button type="button" variant="outline" onClick={handlePreStep} className="w-fit rounded-xl h-10">
                     Trở lại
                 </Button>
-                <Button type="button" onClick={handleNext} className={'w-fit rounded-xl h-10 text-tx-foreground'}>
+                <Button type="button" onClick={handleNext} className="w-fit rounded-xl h-10 text-tx-foreground">
                     Tiếp tục
                 </Button>
             </div>

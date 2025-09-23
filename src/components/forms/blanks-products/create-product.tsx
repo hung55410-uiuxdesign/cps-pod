@@ -39,9 +39,16 @@ const initialValue = {
     },
 } as unknown as SerializedEditorState
 
+const AttributeValueUISchema = z.object({
+    title: z.string().min(1, "Vui lòng nhập giá trị"),
+    title_id: z.string().optional(),
+    properties: z.string().optional(),
+})
+
 const AttributeSchema = z.object({
     attr_id: z.number().optional(),
-    name: z.string(),
+    name: z.string().min(1, "Tên thuộc tính không được để trống"),
+    values: z.array(AttributeValueUISchema).optional()
 })
 
 const AttributeValueSchema = z.object({
@@ -50,32 +57,26 @@ const AttributeValueSchema = z.object({
     title_id: z.string(),
     prop_name: z.string(),
     properties: z.string(),
-});
+})
 
 const formSchema = z.object({
     title: z.string().min(2, {
         message: "Tên người dùng phải có ít nhất 2 ký tự.",
     }),
-    images: z.array(
-        z.string().url({
-            message: "Mỗi URL phải là một địa chỉ hình ảnh hợp lệ.",
-        })
-    ).min(1, {
+    images: z.array(z.string().url({
+        message: "Mỗi URL phải là một địa chỉ hình ảnh hợp lệ.",
+    })).min(1, {
         message: "Vui lòng thêm ít nhất một hình ảnh.",
     }),
     category_id: z.string().nonempty({
         message: "Vui lòng chọn danh mục sản phẩm.",
     }),
     price: z.string()
-        .nonempty({
-            message: "Giá sản phẩm không được để trống."
-        })
-        .refine((value) => {
-            const numValue = Number(value);
-            return !isNaN(numValue) && numValue >= 0;
-        }, {
-            message: "Giá sản phẩm phải là một số không âm."
-        }),
+        .nonempty({ message: "Giá sản phẩm không được để trống." })
+        .refine(value => {
+            const numValue = Number(value)
+            return !isNaN(numValue) && numValue >= 0
+        }, { message: "Giá sản phẩm phải là một số không âm." }),
     status: z.string().nonempty({
         message: "Trạng thái không được để trống.",
     }),
@@ -85,15 +86,31 @@ const formSchema = z.object({
     descriptionState: z.any().optional(),
     attributes: z.array(AttributeSchema),
     attribute_values: z.array(AttributeValueSchema).optional(),
-});
+    product_variants: z.array(
+        z.object({
+            idx: z.number().optional(),
+            price: z.number().nonnegative(),
+            attributes: z.array(
+                z.object({
+                    value: z.string(),
+                    value_id: z.string(),
+                    attribute_id: z.union([z.string(), z.number()]),
+                    attribute_name: z.string(),
+                })
+            ).min(1),
+        })
+    ),
+})
 
-type FormValueType = z.infer<typeof formSchema>;
+export type FormSchemaType = z.infer<typeof formSchema>;
+export type ProductVariant = FormSchemaType["product_variants"][number];
+export type ProductVariantAttribute = ProductVariant["attributes"][number];
 
 export default function CreateProduct() {
     const defaultValue = TabsData[0]?.value;
     const [activeTab, setActiveTab] = useState(TabsData[0]?.value);
 
-    const form = useForm<FormValueType>({
+    const form = useForm<FormSchemaType>({
         defaultValues: {
             title: "",
             images: [],
@@ -104,16 +121,39 @@ export default function CreateProduct() {
             attributes: [],
             attribute_values: [],
             descriptionState: initialValue,
+            product_variants: []
         },
         mode: "onBlur",
         resolver: zodResolver(formSchema),
     });
 
-    const onSubmit = (data: FormValueType) => {
-        const { descriptionState, ...rest } = data
-        console.log("✅ Form submit thành công", rest)
-    }
+    const onSubmit = (data: FormSchemaType) => {
+        const { descriptionState, attributes, ...rest } = data
 
+        const attributesPayload = attributes.map(attr => ({
+            attr_id: attr.attr_id,
+            name: attr.name,
+        }))
+
+        const attributeValuesPayload = attributes.flatMap(attr =>
+            (attr.values ?? []).map(val => ({
+                title: val.title,
+                prop_id: attr.attr_id,
+                title_id: val.title,
+                prop_name: attr.name,
+                properties: `${attr.attr_id ?? 0}:${val.title}`,
+            }))
+        )
+
+        const payload = {
+            ...rest,
+            attributes: attributesPayload,
+            attribute_values: attributeValuesPayload,
+            description: data.description,
+            descriptionState,
+        }
+        console.log("✅ Form submit thành công", payload)
+    }
 
     const onError = (errors: any) => {
         console.log("❌ Form submit lỗi", errors);
@@ -128,7 +168,7 @@ export default function CreateProduct() {
 
     const handlePrevStep = () => {
         const currentIndex = TabsData.findIndex(tab => tab.value === activeTab);
-        if (currentIndex < TabsData.length - 1) {
+        if (currentIndex > 0) {
             setActiveTab(TabsData[currentIndex - 1].value);
         }
     };
