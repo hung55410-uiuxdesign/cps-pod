@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { EditorState, SerializedEditorState } from "lexical"
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin"

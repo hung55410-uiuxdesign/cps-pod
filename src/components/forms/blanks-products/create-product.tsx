@@ -3,7 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {TabsData} from "@/lib/constants/ui/tabs-data";
 import {z} from "zod";
-import {FormProvider, useForm} from "react-hook-form";
+import {FieldErrors, FormProvider, useForm} from "react-hook-form";
 import {useState} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button";
@@ -150,12 +150,11 @@ export default function CreateProduct() {
             attributes: attributesPayload,
             attribute_values: attributeValuesPayload,
             description: data.description,
-            descriptionState,
         }
         console.log("✅ Form submit thành công", payload)
     }
 
-    const onError = (errors: any) => {
+    const onError = (errors: FieldErrors<FormSchemaType>) => {
         console.log("❌ Form submit lỗi", errors);
     };
 

@@ -20,7 +20,7 @@ type Props = {
 };
 
 export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction}: Props) {
-    const { control, trigger } = useFormContext();
+    const { control } = useFormContext();
 
     const { fields: attributeFields, append: appendAttribute, remove: removeAttribute } = useFieldArray({
         control,

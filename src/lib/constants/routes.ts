@@ -1,4 +1,4 @@
-import {Home, Calculator, Package, ShoppingCart, Users, Plus, Shirt} from "lucide-react"
+import {Home, Calculator, Package, ShoppingCart, Users, Plus} from "lucide-react"
 
 export type RouteItem = {
     path: string

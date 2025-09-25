@@ -8,7 +8,6 @@ import Search from "@/components/layout/common/search";
 import ButtonBadge from "@/components/features/ButtonBadge";
 import AvatarMenu from "@/components/features/AvatarMenu";
 import {UserType} from "@/lib/types/user";
-import {CartPopover} from "@/components/features/popovers/CartPopover";
 
 type HeaderProps = {
     onToggleSidebar: () => void;
