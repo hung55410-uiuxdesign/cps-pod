@@ -4,6 +4,7 @@ import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import {ThemeProvider} from "@/components/provider/ThemeProvider";
 import MainFrame from "@/components/layout/frames/main-frame";
+import { Toaster } from "@/components/ui/sonner"
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
@@ -40,6 +41,13 @@ export default function RootLayout({
             {children}
           </MainFrame>
         </ThemeProvider>
+      <Toaster
+          className={'rounded-xl shadow-2xl'}
+          expand={false}
+          position={'top-center'}
+          richColors
+          closeButton
+      />
       </body>
     </html>
   );

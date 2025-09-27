@@ -3,7 +3,6 @@
 import {Button} from "@/components/ui/button";
 import {useFormContext} from "react-hook-form";
 import {useEffect, useMemo, useState} from "react";
-import {FormSchemaType, ProductVariant, ProductVariantAttribute} from "@/components/forms/blanks-products/create-product";
 import {
     Select,
     SelectContent,
@@ -16,6 +15,11 @@ import {Search, Settings2} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {Checkbox} from "@/components/ui/checkbox";
 import CustomAccordion from "@/components/features/lists/GroupVariants";
+import {
+    AttributeSchemaType,
+    ProductVariantSchemaType
+} from "@/lib/types/forms/create-product-form-schema";
+import {generateVariants, mergeVariants} from "@/lib/helpers/generate-variants-helper";
 
 type Props = {
     onNextStepAction?: () => void;
@@ -23,46 +27,28 @@ type Props = {
 };
 
 export default function CreatePGenerateVariant({onNextStepAction, onPrevStepAction}: Props) {
-    const { trigger, getValues, setValue, watch } = useFormContext();
-    const { attributes, product_variants: existingVariants } = getValues() as FormSchemaType;
+    const { trigger, setValue, watch } = useFormContext();
+
+    const attributes: AttributeSchemaType[] = watch("attributes")
+    const price: string = watch("price")
+    const current = (watch("product_variants") as ProductVariantSchemaType[]) ?? []
+
     const [groupBy, setGroupBy] = useState<string | null>(attributes?.[0]?.name ?? null);
 
     const [isOpenFilter, setIsOpenFilter] = useState(false);
     const [search, setSearch] = useState("");
     const [filters, setFilters] = useState<Record<string, string>>({});
 
-    const initialVariants = useMemo<ProductVariant[]>(() => {
-        if (!attributes || attributes.length === 0) return [];
-
-        const valueGroups: ProductVariantAttribute[][] = attributes.map((attr) =>
-            attr.values?.map<ProductVariantAttribute>((val) => ({
-                value: val.title,
-                value_id: val.title,
-                attribute_id: attr.attr_id?.toString() ?? Date.now().toString(),
-                attribute_name: attr.name,
-            })) ?? []
-        );
-
-        const cartesian = <T,>(arr: T[][]): T[][] =>
-            arr.reduce<T[][]>(
-                (a, b) => a.flatMap((x) => b.map((y) => [...x, y])),
-                [[]]
-            );
-
-        return cartesian(valueGroups).map<ProductVariant>((combo, idx) => ({
-            idx,
-            price: 0,
-            attributes: combo,
-        }));
-    }, [attributes]);
+    const initVariants = generateVariants(attributes, price)
 
     useEffect(() => {
-        if (!existingVariants || existingVariants.length === 0) {
-            setValue("product_variants", initialVariants);
-        }
-    }, [initialVariants, existingVariants, setValue]);
+        if (!attributes || attributes.length === 0) return
 
-    const products_variants = watch("product_variants") as ProductVariant[];
+        const merged = mergeVariants(current, initVariants, price)
+        setValue("product_variants", merged)
+    }, [attributes, price])
+
+    const products_variants = watch("product_variants") as ProductVariantSchemaType[];
 
     const filteredVariants = useMemo(() => {
         let result = [...products_variants];
@@ -94,7 +80,7 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
     const groupedVariants = useMemo(() => {
         if (!groupBy) return { all: filteredVariants };
 
-        const groups: Record<string, ProductVariant[]> = {};
+        const groups: Record<string, ProductVariantSchemaType[]> = {};
         filteredVariants.forEach((variant) => {
             const attr = variant.attributes.find((a) => a.attribute_name === groupBy);
             const key = attr?.value ?? "Khác";
@@ -104,20 +90,9 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
         return groups;
     }, [filteredVariants, groupBy]);
 
-    const handleUpdateVariant = (index: number, newPrice: number) => {
+    const handleUpdateVariant = (index: number, newPrice: string) => {
         const updated = [...products_variants];
         updated[index] = { ...updated[index], price: newPrice };
-        setValue("product_variants", updated, { shouldDirty: true });
-    };
-
-    const handleUpdateGroup = (groupName: string, newPrice: number) => {
-        const updated = products_variants.map((v) => {
-            const attr = v.attributes.find((a) => a.attribute_name === groupBy);
-            if (attr?.value === groupName) {
-                return { ...v, price: newPrice };
-            }
-            return v;
-        });
         setValue("product_variants", updated, { shouldDirty: true });
     };
 
@@ -144,7 +119,7 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
                     <div className={'flex flex-row gap-3 items-center'}>
                         <div className="flex flex-row items-center gap-2">
                             <span className={'text-sm text-tx-muted text-nowrap'}>Nhóm bởi:</span>
-                            <Select value={groupBy ?? ""} onValueChange={setGroupBy}>
+                            <Select value={groupBy ?? ""} onValueChange={setGroupBy} disabled={true}>
                                 <SelectTrigger className={'shadow-none bg-background gap-3 rounded-xl h-10'}>
                                     <SelectValue placeholder="Chọn thuộc tính" />
                                 </SelectTrigger>
@@ -190,7 +165,7 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
 
                             <div className="flex flex-row gap-3">
                                 {attributes?.map((attr, index) => {
-                                    const attrId = attr.attr_id?.toString() ?? "";
+                                    const attrId = attr.id?.toString() ?? "";
                                     return (
                                         <div key={index} className={'flex flex-row gap items-center gap-2 pl-3 h-10 border-[0.5px] border-line rounded-xl'}>
                                             <p className="text-sm">{attr.name}:</p>
@@ -273,7 +248,6 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
                     <CustomAccordion
                         groupedVariants={groupedVariants}
                         onUpdateVariant={handleUpdateVariant}
-                        onUpdateGroup={handleUpdateGroup}
                     />
                 </div>
             </div>

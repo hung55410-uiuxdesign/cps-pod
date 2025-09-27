@@ -4,11 +4,6 @@ import { useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import {Button} from "@/components/ui/button";
 import {ChevronDown, ChevronRight} from "lucide-react";
-import {
-    Tooltip,
-    TooltipContent, TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
 import {Input} from "@/components/ui/input"
 
 type VariantAttribute = {
@@ -17,7 +12,7 @@ type VariantAttribute = {
 }
 
 type ProductVariant = {
-    price: number
+    price: string
     attributes: VariantAttribute[]
     idx?: number
 }
@@ -26,11 +21,10 @@ type GroupedVariantProps = {
     groupName: string
     variants: ProductVariant[]
     isLast?: boolean
-    onUpdateVariant: (index: number, price: number) => void
-    onUpdateGroup: (groupName: string, price: number) => void
+    onUpdateVariant: (index: number, price: string) => void
 }
 
-function GroupedVariant({ groupName, variants, isLast, onUpdateVariant, onUpdateGroup }: GroupedVariantProps) {
+function GroupedVariant({ groupName, variants, isLast, onUpdateVariant }: GroupedVariantProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [checked, setChecked] = useState(false)
 
@@ -55,21 +49,7 @@ function GroupedVariant({ groupName, variants, isLast, onUpdateVariant, onUpdate
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 content-center">
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Input
-                                    className={'h-11 shadow-none rounded-xl border-[0.5px] border-line'}
-                                    type="number"
-                                    onChange={e => onUpdateGroup(groupName, Number(e.target.value))}
-                                    placeholder="Nhập giá..."
-                                />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Apply to {variants.length} variants</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+
                 </div>
             </div>
 
@@ -95,7 +75,7 @@ function GroupedVariant({ groupName, variants, isLast, onUpdateVariant, onUpdate
                                     className={'h-11 shadow-none rounded-xl border-[0.5px] border-line'}
                                     type="number"
                                     value={variant.price ?? ""}
-                                    onChange={e => onUpdateVariant(variant.idx!, Number(e.target.value))}
+                                    onChange={e => onUpdateVariant(variant.idx!, e.target.value)}
                                     placeholder="Nhập giá..."
                                 />
                             </div>
@@ -109,11 +89,10 @@ function GroupedVariant({ groupName, variants, isLast, onUpdateVariant, onUpdate
 
 type AccordionProps = {
     groupedVariants: Record<string, ProductVariant[]>
-    onUpdateVariant: (index: number, price: number) => void
-    onUpdateGroup: (groupName: string, price: number) => void
+    onUpdateVariant: (index: number, price: string) => void
 }
 
-export default function CustomAccordion({ groupedVariants, onUpdateGroup, onUpdateVariant }: AccordionProps) {
+export default function CustomAccordion({ groupedVariants, onUpdateVariant }: AccordionProps) {
     const entries = Object.entries(groupedVariants)
 
     return (
@@ -125,7 +104,6 @@ export default function CustomAccordion({ groupedVariants, onUpdateGroup, onUpda
                     variants={variants}
                     isLast={idx === entries.length - 1}
                     onUpdateVariant={onUpdateVariant}
-                    onUpdateGroup={onUpdateGroup}
                 />
             ))}
         </div>

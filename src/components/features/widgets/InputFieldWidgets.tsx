@@ -9,7 +9,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter,
-    DialogTrigger
+    DialogTrigger, DialogDescription
 } from "@/components/ui/dialog";
 import {Link} from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -73,26 +73,29 @@ export function InputFieldWidgets({ error, onUrlSelect, currentUrl, ...props }: 
                         </DialogTrigger>
                     )}
 
-                    <DialogContent>
+                    <DialogContent className={'rounded-xl'}>
                         <DialogHeader>
-                            <DialogTitle>Thêm ảnh bằng URL</DialogTitle>
+                            <DialogTitle>Thêm hình ảnh</DialogTitle>
+                            <DialogDescription></DialogDescription>
                         </DialogHeader>
                         <div className="flex flex-col items-center gap-4 py-4">
                             {inputValue && isInputValid && (
-                                <img
-                                    src={inputValue}
-                                    alt="Preview"
-                                    className="w-full max-h-80 object-contain rounded-md"
-                                />
+                                <div className={'h-80 max-w-1/2 rounded-xl overflow-hidden'}>
+                                    <img
+                                        src={inputValue}
+                                        alt="Preview"
+                                        className="w-full h-full max-h-80 object-cover"
+                                    />
+                                </div>
                             )}
                             <Input
                                 placeholder="Dán link ảnh tại đây..."
                                 value={inputValue}
                                 onChange={handleInputChange}
-                                className={cn(isInputValid ? "" : "border-red-500")}
+                                className={cn(`h-11 rounded-xl border-[0.5px] border-line shadow-none ${isInputValid ? "" : "border-red-500"}`)}
                             />
                             {!isInputValid && (
-                                <p className="text-sm text-red-500">Vui lòng nhập một URL hợp lệ.</p>
+                                <p className="text-sm text-danger">Vui lòng nhập một URL hợp lệ.</p>
                             )}
                         </div>
                         <DialogFooter>

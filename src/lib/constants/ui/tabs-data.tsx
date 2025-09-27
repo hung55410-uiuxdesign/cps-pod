@@ -33,6 +33,6 @@ export const TabsData: TabType[] = [
     {
         name: "Biến thể",
         value: "variants",
-        content: ({onNextStep, onPrevStep }) => <CreatePGenerateVariant onNextStepAction={onNextStep} onPrevStepAction={onPrevStep} />
+        content: ({onNextStep, onPrevStep }) => <CreatePGenerateVariant onNextStepAction={onNextStep} onPrevStepAction={onPrevStep}/>
     },
 ];

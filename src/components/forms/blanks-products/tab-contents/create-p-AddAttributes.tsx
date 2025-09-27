@@ -13,6 +13,7 @@ import {
 import {InputFieldWidgets} from "@/components/features/widgets/InputFieldWidgets";
 import CreatePAddAttributeValues from "@/components/forms/blanks-products/tab-contents/create-p-AddAttributeValues";
 import Empty from "@/components/utils/Empty";
+import {extractAttributeValues} from "@/lib/helpers/extract-attributes-values";
 
 type Props = {
     onNextStepAction?: () => void;
@@ -20,20 +21,21 @@ type Props = {
 };
 
 export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction}: Props) {
-    const { control } = useFormContext();
+    const { control, watch, setValue, trigger } = useFormContext();
 
     const { fields: attributeFields, append: appendAttribute, remove: removeAttribute } = useFieldArray({
         control,
         name: "attributes"
     });
 
-    const handleNext = async () => {
-        // const isStepValid = await trigger([]);
-        // if (isStepValid && onNextStepAction) {
-        //     onNextStepAction();
-        // }
+    const attributes = watch("attributes");
 
-        if(onNextStepAction) onNextStepAction();
+    const attributes_value = extractAttributeValues(attributes);
+
+    const handleNext = async () => {
+        const isStepValid = await trigger(["attributes"]);
+        setValue("attribute_values", attributes_value);
+        if(isStepValid && onNextStepAction) onNextStepAction();
     };
 
     const handlePreStep = () => {
@@ -50,7 +52,7 @@ export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction
                         type="button"
                         onClick={() =>
                             appendAttribute({
-                                attr_id: Date.now(),
+                                id: Date.now().toString(),
                                 name: "",
                                 values: []
                             })
@@ -102,6 +104,21 @@ export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction
                             }}
                         />
                     )}
+                </div>
+                <div className={'w-full p-3 bg-muted border-t border-line'}>
+                    <Button
+                        className="h-10 rounded-xl"
+                        type="button"
+                        onClick={() =>
+                            appendAttribute({
+                                id: Date.now().toString(),
+                                name: "",
+                                values: []
+                            })
+                        }
+                    >
+                        Thêm thuộc tính
+                    </Button>
                 </div>
             </div>
 

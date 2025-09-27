@@ -5,6 +5,8 @@ import { getAuthToken } from "../utils/get-token";
 export async function mutateClientData(method: string, url: string, payload?: object) {
     const { authToken } = await getAuthToken();
 
+    console.log('authToken ', authToken);
+
     const headers = new Headers();
 
     headers.append("Content-Type", "application/json");

@@ -12,6 +12,8 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import {getProductsAction} from "@/lib/data/actions/product-actions";
+import {useEffect} from "react";
 
 const filters: ProductFilterItem[] = [
     {
@@ -48,6 +50,14 @@ export default function ProductList() {
     const handleFilterChange = (payload: ProductFilterPayload) => {
         console.log("Filter changed:", payload);
     };
+
+    useEffect(() => {
+        (async () => {
+            const response = await getProductsAction();
+            console.log("Response:", response);
+        })()
+    }, []);
+
     return (
         <>
             <FilterWidget filters={filters} onChange={handleFilterChange} />

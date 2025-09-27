@@ -50,7 +50,7 @@ const SortableItem = ({ item, onRemoveImage }: { item: ImageItem, onRemoveImage:
             style={style}
             {...attributes}
             {...listeners}
-            className="relative w-full max-h-[220px] cursor-grab"
+            className="relative w-full h-full cursor-grab"
         >
             <img
                 src={item.url}
