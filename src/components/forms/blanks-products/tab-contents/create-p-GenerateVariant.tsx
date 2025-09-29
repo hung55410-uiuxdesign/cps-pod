@@ -257,7 +257,7 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
                     Trở lại
                 </Button>
                 <Button type="button" onClick={handleNext} className="w-fit rounded-xl h-10 text-tx-foreground">
-                    Tiếp tục
+                    Tạo sản phẩm
                 </Button>
             </div>
         </div>

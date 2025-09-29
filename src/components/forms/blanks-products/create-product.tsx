@@ -122,7 +122,6 @@ export default function CreateProduct() {
                         </TabsContent>
                     ))}
                 </Tabs>
-                <Button type={'submit'} className={'mt-8'}>Submit</Button>
             </form>
         </FormProvider>
     )
