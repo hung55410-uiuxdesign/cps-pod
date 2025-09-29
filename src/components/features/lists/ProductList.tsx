@@ -12,8 +12,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-import {getProductsAction} from "@/lib/data/actions/product-actions";
-import {useEffect} from "react";
+import {ProductListType} from "@/lib/types/product";
 
 const filters: ProductFilterItem[] = [
     {
@@ -46,32 +45,24 @@ const filters: ProductFilterItem[] = [
     },
 ];
 
-export default function ProductList() {
+type Props = {
+    data: ProductListType;
+}
+
+export default function ProductList({ data }: Props) {
     const handleFilterChange = (payload: ProductFilterPayload) => {
         console.log("Filter changed:", payload);
     };
 
-    useEffect(() => {
-        (async () => {
-            const response = await getProductsAction();
-            console.log("Response:", response);
-        })()
-    }, []);
+    const products = data?.products || [];
 
     return (
         <>
             <FilterWidget filters={filters} onChange={handleFilterChange} />
             <div className={'grid grid-cols-6 gap-4'}>
-                <ItemProduct />
-                <ItemProduct />
-                <ItemProduct />
-                <ItemProduct />
-                <ItemProduct />
-                <ItemProduct />
-                <ItemProduct />
-                <ItemProduct />
-                <ItemProduct />
-                <ItemProduct />
+                {products?.map((product, index) => (
+                    <ItemProduct key={index} item={product} />
+                ))}
             </div>
             <Pagination className={'w-full justify-end'}>
                 <PaginationContent>

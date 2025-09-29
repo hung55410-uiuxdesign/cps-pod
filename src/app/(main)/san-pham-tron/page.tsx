@@ -3,7 +3,6 @@ import {Ellipsis, Package, Plus} from "lucide-react";
 import Header from "@/components/utils/Header";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
-import ProductList from "@/components/features/lists/ProductList";
 
 export default async function Page() {
     await new Promise(resolve => setTimeout(resolve, 4000));
@@ -56,7 +55,6 @@ export default async function Page() {
                     </Button>
                 </div>
             </div>
-            <ProductList />
         </div>
     )
 }

@@ -5,7 +5,6 @@ import {TabsData} from "@/lib/constants/ui/tabs-data";
 import {FieldErrors, FormProvider, useForm} from "react-hook-form";
 import {useState} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Button} from "@/components/ui/button";
 import {SerializedEditorState} from "lexical";
 import {formSchema, FormSchemaType} from "@/lib/types/forms/create-product-form-schema";
 import {createProductAction} from "@/lib/data/actions/product-actions";

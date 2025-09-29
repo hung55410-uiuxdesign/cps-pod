@@ -4,9 +4,13 @@ import Header from "@/components/utils/Header";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import ProductList from "@/components/features/lists/ProductList";
+import {getProductsAction} from "@/lib/data/actions/product-actions";
+
+
 
 export default async function Page() {
-    await new Promise(resolve => setTimeout(resolve, 4000));
+    const data = await getProductsAction();
+
     return (
         <div className={'flex flex-col gap-8'}>
             <div className={'grid lg:grid-cols-4 grid-cols-2 gap-4'}>
@@ -56,7 +60,7 @@ export default async function Page() {
                     </Button>
                 </div>
             </div>
-            <ProductList />
+            <ProductList data={data} />
         </div>
     )
 }

@@ -6,7 +6,7 @@ import {FormSchemaType} from "@/lib/types/forms/create-product-form-schema";
 export const getProductsAction = async () => {
     try {
         const response = await getProductsServices();
-        return response;
+        return response.data;
     } catch (error) {
         console.error("Error fetch products:", error);
         throw error;

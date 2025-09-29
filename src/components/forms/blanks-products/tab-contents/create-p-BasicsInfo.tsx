@@ -63,7 +63,7 @@ export default function CreatePBasicsInfo({ onNextStepAction }: Props) {
     const handleNext = async () => {
         const isStepValid = await trigger(["images", "title", "category_id"]);
         if (!isStepValid) {
-            showToast("error", [], "Vui long nhap day du thong tin");
+            showToast("error", [], "Vui lòng nhập đầy đủ thông tin.");
             return;
         }
 

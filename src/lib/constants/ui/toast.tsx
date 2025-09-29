@@ -9,22 +9,22 @@ const stateConfig: Record<
     { icon: JSX.Element; classes: string }
 > = {
     success: {
-        icon: <CheckCircle className="h-5 w-5 text-emerald-600" />,
+        icon: <CheckCircle className="h-5 w-5" />,
         classes:
-            "bg-emerald-100 text-emerald-800 border border-emerald-500",
+            "bg-success-muted text-success border-[0.5px] border-success-line",
     },
     error: {
-        icon: <XCircle className="h-5 w-5 text-red-600" />,
-        classes: "bg-danger-muted text-danger border border-danger",
+        icon: <XCircle className="h-5 w-5" />,
+        classes: "bg-danger-muted text-danger border-[0.5px] border-danger-line",
     },
     warning: {
-        icon: <AlertTriangle className="h-5 w-5 text-amber-600" />,
+        icon: <AlertTriangle className="h-5 w-5" />,
         classes:
-            "bg-amber-100 text-amber-800 border border-amber-500",
+            "bg-warning-muted text-warning border-[0.5px] border-warning-line",
     },
     info: {
-        icon: <Info className="h-5 w-5 text-blue-600" />,
-        classes: "bg-blue-100 text-blue-800 border border-blue-500",
+        icon: <Info className="h-5 w-5" />,
+        classes: "bg-info-muted text-info border-[0.5px] border-info-line",
     },
 };
 
@@ -33,11 +33,11 @@ export const showToast = (state: ToastState, message: string | string[], title: 
 
     toast.custom(() => (
         <div
-            className={`flex flex-col items-start gap-2 rounded-lg bg-background border-[0.5px] border-line p-4 shadow-2xl ${stateConfig[state].classes}`}
+            className={`flex flex-col items-start gap-2 rounded-xl bg-background p-3 shadow-2xl ${stateConfig[state].classes}`}
         >
             <div className={'flex flex-row gap-2 items-center'}>
                 {stateConfig[state].icon}
-                <p className={'font-semibold'}>{title}</p>
+                <p className={'font-semibold text-sm'}>{title}</p>
             </div>
             {messages.length > 0 && (
                 <div className="flex flex-col ml-[28px]">
