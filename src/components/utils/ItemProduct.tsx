@@ -13,9 +13,8 @@ type Props = {
 }
 
 export function ItemProduct({ item }: Props) {
-    console.log(item);
     return (
-        <Link href={`/san-pham-tron/${item.id}`} className={'h-full'}>
+        <Link href={`/san-pham/${item.id}`} className={'h-full'}>
             <div className={'p-2 border-[0.5px] border-line h-full rounded-xl flex flex-col gap-4 group'}>
                 <div className={'relative rounded-lg overflow-hidden min-h-[180px]'}>
                     <img

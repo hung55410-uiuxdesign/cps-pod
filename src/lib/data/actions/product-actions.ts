@@ -1,6 +1,10 @@
 'use server'
 
-import {createProductService, getProductsServices} from "@/lib/data/services/product-services";
+import {
+    createProductService,
+    getDetailsProductService,
+    getProductsServices
+} from "@/lib/data/services/product-services";
 import {FormSchemaType} from "@/lib/types/forms/create-product-form-schema";
 
 export const getProductsAction = async () => {
@@ -19,6 +23,16 @@ export const createProductAction = async (data: FormSchemaType) => {
         return response;
     } catch (error) {
         console.error("Error creating product:", error);
+        throw error;
+    }
+}
+
+export const getProductByIdAction = async (id: string) => {
+    try {
+        const response = await getDetailsProductService(id);
+        return response.data;
+    } catch (error) {
+        console.error("Error getting product:", error);
         throw error;
     }
 }

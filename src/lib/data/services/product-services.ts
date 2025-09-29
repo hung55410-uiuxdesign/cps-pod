@@ -11,3 +11,7 @@ export const getProductsServices = async () => {
 export const createProductService = async (data: FormSchemaType) => {
     return await mutateClientData("post", `${getCpsPodServiceApiURL()}/api/1/supplier/products`, data)
 }
+
+export const getDetailsProductService = async (id: string) => {
+    return await mutateClientData("get", `${getCpsPodServiceApiURL()}/api/1/supplier/products/${id}`)
+}

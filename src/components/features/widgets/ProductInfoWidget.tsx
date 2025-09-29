@@ -7,19 +7,44 @@ import { useState } from "react";
 import {QuantitySelectWidget} from "@/components/features/widgets/QuantitySelectWidget";
 import {Button} from "@/components/ui/button";
 import {Heart, Share2, ShoppingCart} from "lucide-react";
+import {ProductType} from "@/lib/types/product";
 
-export function ProductInfoWidget() {
+type Props = {
+    product: ProductType;
+}
+
+export function ProductInfoWidget({product}: Props) {
     const [selectedSizes, setSelectedSizes] = useState<string[]>([])
     const [selectedColor, setSelectedColor] = useState<string[]>([])
     const [selectedPrintArea, setSelectedPrintArea] = useState<string[]>([])
 
+    console.log('data', product)
+
     return (
         <div className={'w-full flex flex-col gap-8'}>
-            <div className={'flex flex-row gap-2'}>
-                <Badge className={'w-fit rounded-lg bg-success-muted text-tx-success shadow-none'}>In stock</Badge>
-                <Badge variant={"outline"} className={'rounded-lg text-tx-muted border-[0.5px] border-line'}>ID: 123123123</Badge>
+            <div className="flex flex-row gap-2">
+                <Badge
+                    className={`w-fit rounded-lg shadow-none text-background ${
+                        product.stock > 0
+                            ? "bg-info hover:bg-info"
+                            : "bg-danger hover:bg-danger"
+                    }`}
+                >
+                    {product.stock > 0 ? "In stock" : "Out of stock"}
+                </Badge>
+
+                <Badge
+                    variant="outline"
+                    className="rounded-lg text-tx-muted border-[0.5px] border-line"
+                >
+                    ID: {product.id}
+                </Badge>
             </div>
-            <h1 className={'font-semibold text-3xl text-tx-default'}>Áo khoác nam chống nước</h1>
+
+            <div className={'flex flex-col gap-2'}>
+                <h1 className={'font-semibold text-3xl text-tx-default'}>{product.title}</h1>
+                <p className={'text-sm text0tx-muted'}>SKU: {product.sku}</p>
+            </div>
             <div className={'flex flex-row p-4 rounded-xl border-[0.5px] border-line items-center justify-between'}>
                 <p className={'text-tx-muted'}>450 đã bán</p>
                 <div className={'flex flex-row items-center gap-2'}>
@@ -28,8 +53,8 @@ export function ProductInfoWidget() {
                 </div>
             </div>
             <div className={'flex flex-row gap-2 items-baseline'}>
-                <h2 className={'font-semibold text-xl text-tx-default'}>120,000 VNĐ</h2>
-                <p className={'text-tx-disabled line-through'}>150,000 VNĐ</p>
+                <h2 className={'font-semibold text-xl text-tx-default'}>{product.price} VNĐ</h2>
+                {/*<p className={'text-tx-disabled line-through'}>150,000 VNĐ</p>*/}
             </div>
             <Separator />
             <RenderSelectWidget

@@ -69,6 +69,7 @@ export type ProductType = {
     description: string | null
     meta_description: string | null
     state: string
+    stock: number
     created_at: string
 }
 

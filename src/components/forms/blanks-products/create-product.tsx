@@ -11,6 +11,7 @@ import {createProductAction} from "@/lib/data/actions/product-actions";
 
 import { useRouter } from "next/navigation"
 import {toast} from "sonner";
+import {showToast} from "@/lib/constants/ui/toast";
 
 const initialValue = {
     root: {
@@ -45,6 +46,7 @@ const initialValue = {
 export default function CreateProduct() {
     const defaultValue = TabsData[0]?.value;
     const [activeTab, setActiveTab] = useState(TabsData[0]?.value);
+    const [completedSteps, setCompletedSteps] = useState<string[]>([])
 
     const router = useRouter()
 
@@ -69,6 +71,7 @@ export default function CreateProduct() {
         const response = await createProductAction(data)
         if (response?.success) {
             toast.success("Tao san pham thanh cong");
+            console.log(response)
             router.push("/san-pham")
         } else {
             toast.error("Tao san pham that bai");
@@ -80,27 +83,36 @@ export default function CreateProduct() {
     };
 
     const handleNextStep = () => {
-        const currentIndex = TabsData.findIndex(tab => tab.value === activeTab)
-
+        const currentIndex = TabsData.findIndex((tab) => tab.value === activeTab)
         if (currentIndex < TabsData.length - 1) {
-            setActiveTab(TabsData[currentIndex + 1].value)
+            const nextTab = TabsData[currentIndex + 1].value
+            setCompletedSteps((prev) => [...new Set([...prev, activeTab])])
+            setActiveTab(nextTab)
         } else {
             form.handleSubmit(onSubmit, onError)()
-
         }
     }
 
     const handlePrevStep = () => {
-        const currentIndex = TabsData.findIndex(tab => tab.value === activeTab);
+        const currentIndex = TabsData.findIndex((tab) => tab.value === activeTab)
         if (currentIndex > 0) {
-            setActiveTab(TabsData[currentIndex - 1].value);
+            setActiveTab(TabsData[currentIndex - 1].value)
         }
-    };
+    }
 
     return (
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit, onError)}>
-                <Tabs value={activeTab} defaultValue={defaultValue} className="w-full">
+                <Tabs
+                    value={activeTab}
+                    defaultValue={defaultValue}
+                    className="w-full"
+                    onValueChange={(value) => {
+                        if (value === activeTab || completedSteps.includes(value)) {
+                            setActiveTab(value)
+                        }
+                    }}
+                >
                     <TabsList className={'bg-transparent border-b-[0.5px] border-line w-full justify-start rounded-none p-0 h-fit gap-3 mb-6'}>
                         {TabsData.map((tab) => (
                             <TabsTrigger
