@@ -111,7 +111,7 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
 
     const handleNext = async () => {
         const isStepValid = await trigger();
-        if (isStepValid && onNextStepAction) {
+        if ( onNextStepAction) {
             onNextStepAction();
         }
     };
@@ -256,6 +256,7 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
                             <Checkbox />
                             <p className={'font-semibold'}>Variants</p>
                             <Button
+                                type={"button"}
                                 className={'p-0'}
                                 variant={'link'}
                             >

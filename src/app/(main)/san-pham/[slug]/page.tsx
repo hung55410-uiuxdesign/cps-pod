@@ -1,7 +1,7 @@
 import BackButton from "@/components/features/BackButton";
-import {ImagePreviewWidget} from "@/components/features/widgets/ImagePreviewWidget";
-import {ProductInfoWidget} from "@/components/features/widgets/ProductInfoWidget";
 import {getProductByIdAction} from "@/lib/data/actions/product-actions";
+import {DetailsProductSection} from "@/app/(main)/san-pham/[slug]/section/details-product-section";
+import {Separator} from "@/components/ui/separator";
 
 export default async function Page({params}: {params: Promise<{slug: string}>}) {
     const {slug} = await params;
@@ -11,10 +11,12 @@ export default async function Page({params}: {params: Promise<{slug: string}>}) 
     return (
         <div className={'w-full max-w-[1080px] mx-auto flex flex-col gap-8'}>
             <BackButton />
-            <div className={'grid grid-cols-2 gap-8'}>
-                <ImagePreviewWidget />
-                <ProductInfoWidget product={data} />
-            </div>
+            <DetailsProductSection product={data} />
+            <Separator />
+            <div
+                className="prose max-w-none"
+                dangerouslySetInnerHTML={{ __html: data.description }}
+            />
         </div>
     )
 }

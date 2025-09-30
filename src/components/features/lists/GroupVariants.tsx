@@ -46,7 +46,7 @@ function GroupedVariant({ groupName, variants, isLast, onUpdateVariant, image }:
                         </div>
                         <div className="flex flex-col">
                             <p>{groupName}</p>
-                            <Button variant="link" className="p-0 text-tx-muted cursor-pointer">
+                            <Button type={'button'} variant="link" className="p-0 text-tx-muted cursor-pointer">
                                 <span>{variants.length} variants</span>
                                 {isOpen ? <ChevronDown /> : <ChevronRight />}
                             </Button>

@@ -37,7 +37,7 @@ export function SelectCategory({ control, setValueAction }: Props) {
     return (
         <FormField
             control={control}
-            name="category_id"
+            name="primary_category_id"
             render={({ field }) => (
                 <FormItem className="flex flex-col gap">
                     <FormLabel>Danh mục:</FormLabel>
@@ -77,7 +77,7 @@ export function SelectCategory({ control, setValueAction }: Props) {
                                                 key={cate.id}
                                                 value={cate.name.vi}
                                                 onSelect={() => {
-                                                    setValueAction("category_id", cate.id?.toString() ?? "")
+                                                    setValueAction("primary_category_id", cate.id?.toString() ?? "")
                                                 }}
                                             >
                                                 {cate.name.vi}

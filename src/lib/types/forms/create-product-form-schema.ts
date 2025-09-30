@@ -50,9 +50,10 @@ export const formSchema = z.object({
     })).min(1, {
         message: "Vui lòng thêm ít nhất một hình ảnh.",
     }),
-    category_id: z.string().nonempty({
-        message: "Vui lòng chọn danh mục sản phẩm.",
-    }),
+    primary_category_id: z.union([z.string(), z.number()])
+        .refine((val) => val !== "" && val !== null && val !== undefined, {
+            message: "Vui lòng chọn danh mục sản phẩm.",
+        }),
     price: z.string()
         .nonempty({ message: "Giá sản phẩm không được để trống." })
         .refine(value => {

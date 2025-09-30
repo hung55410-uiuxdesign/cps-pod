@@ -6,7 +6,6 @@ import {
     TooltipContent, TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import {Attribute} from "next-themes";
 
 type Props = {
     item: ProductType;
@@ -16,7 +15,7 @@ export function ItemProduct({ item }: Props) {
     return (
         <Link href={`/san-pham/${item.id}`} className={'h-full'}>
             <div className={'p-2 border-[0.5px] border-line h-full rounded-xl flex flex-col gap-4 group'}>
-                <div className={'relative rounded-lg overflow-hidden min-h-[180px]'}>
+                <div className={'relative rounded-lg overflow-hidden h-[180px]'}>
                     <img
                         src={item.images[0]}
                         className={'w-full h-full object-cover hover:scale-110 transition-all duration-200 group-hover:scale-110'}
@@ -41,13 +40,13 @@ export function ItemProduct({ item }: Props) {
                 <div className={'text-sm px-2 flex flex-col gap'}>
                     <p className={'text-tx-muted'}>Từ <span className={'font-semibold text-tx-default'}>{item.price} VNĐ</span></p>
                     <div className={'flex flex-row flex-no-wrap items-center gap-3 text-tx-muted'}>
-                        {item.attributes?.slice(0,2).map((attribute) => (
-                            <>
+                        {item.attributes?.slice(0,2).map((attribute, index) => (
+                            <div key={index} className={'flex flex-row gap-3'}>
                                 <p>{attribute.values?.length} {attribute.name}</p>
                                 {item.attributes?.length > 1 && (
                                     <div className={'min-w-1 h-1 bg-foreground rounded-full'}></div>
                                 )}
-                            </>
+                            </div>
                         ))}
                         {item.attributes?.length > 2 && (
                             <p>...</p>

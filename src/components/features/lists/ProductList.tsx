@@ -3,16 +3,11 @@
 import FilterWidget from "@/components/features/widgets/FilterWidget";
 import {ProductFilterItem, ProductFilterPayload} from "@/lib/types/utils/filter";
 import {ItemProduct} from "@/components/utils/ItemProduct";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
-import {ProductListType} from "@/lib/types/product";
+import {ProductListType, ProductType} from "@/lib/types/product";
+import PaginationWidget from "@/components/features/widgets/PaginationWidget";
+import {useEffect, useState} from "react";
+import {getProductByIdAction, getProductsAction} from "@/lib/data/actions/product-actions";
+import {PaginationType} from "@/lib/types/utils/pagination";
 
 const filters: ProductFilterItem[] = [
     {
@@ -45,16 +40,52 @@ const filters: ProductFilterItem[] = [
     },
 ];
 
-type Props = {
-    data: ProductListType;
-}
+export default function ProductList() {
+    const [products, setProducts] = useState<ProductType[]>([]);
 
-export default function ProductList({ data }: Props) {
+    const [pagination, setPagination] = useState<PaginationType>({current_page: 1, per_page: 10, total: 0});
+
+    const [filtersProduct, setFiltersProduct] = useState<ProductFilterPayload>({
+        category: "",
+        searchQuery: "",
+        sortBy: undefined,
+        sortOrder: undefined,
+        view: "grid",
+    })
+
     const handleFilterChange = (payload: ProductFilterPayload) => {
-        console.log("Filter changed:", payload);
-    };
+        setFiltersProduct((prev) => ({
+            ...prev,
+            ...payload,
+        }))
+        setPagination((prev) => ({
+            ...prev,
+            current_page: 1,
+        }))
+    }
 
-    const products = data?.products || [];
+    const handlePageChange = (page: number) => {
+        setPagination((prev) => ({
+            ...prev,
+            current_page: page,
+        }))
+    }
+
+    useEffect(() => {
+        (async () => {
+            const response: ProductListType = await getProductsAction({
+                page: pagination.current_page,
+                per_page: pagination.per_page,
+            })
+
+            setProducts(response.products)
+            setPagination({
+                current_page: response.current_page,
+                per_page: response.per_page,
+                total: response.total,
+            })
+        })()
+    }, [pagination.current_page, pagination.per_page]);
 
     return (
         <>
@@ -64,30 +95,12 @@ export default function ProductList({ data }: Props) {
                     <ItemProduct key={index} item={product} />
                 ))}
             </div>
-            <Pagination className={'w-full justify-end'}>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious href="#" />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#" isActive>
-                            2
-                        </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">3</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#" />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+            <PaginationWidget
+                total={pagination.total}
+                perPage={pagination.per_page}
+                currentPage={pagination.current_page}
+                onPageChange={handlePageChange}
+            />
         </>
     )
 }

@@ -3,14 +3,15 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {TabsData} from "@/lib/constants/ui/tabs-data";
 import {FieldErrors, FormProvider, useForm} from "react-hook-form";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {SerializedEditorState} from "lexical";
 import {formSchema, FormSchemaType} from "@/lib/types/forms/create-product-form-schema";
-import {createProductAction} from "@/lib/data/actions/product-actions";
+import {createProductAction, updateProductAction} from "@/lib/data/actions/product-actions";
 
 import { useRouter } from "next/navigation"
 import {toast} from "sonner";
+import {ProductType} from "@/lib/types/product";
 
 const initialValue = {
     root: {
@@ -42,7 +43,13 @@ const initialValue = {
     },
 } as unknown as SerializedEditorState
 
-export default function CreateProduct() {
+type Props = {
+    product?: ProductType;
+}
+
+export default function CreateProduct({product}: Props) {
+    const isEdit = Boolean(product);
+
     const defaultValue = TabsData[0]?.value;
     const [activeTab, setActiveTab] = useState(TabsData[0]?.value);
     const [completedSteps, setCompletedSteps] = useState<string[]>([])
@@ -51,28 +58,60 @@ export default function CreateProduct() {
 
     const form = useForm<FormSchemaType>({
         defaultValues: {
-            title: "",
-            images: [],
-            category_id: "",
-            price: "0",
+            title: product?.title ?? "",
+            images: product?.images ?? [],
+            primary_category_id: product?.categories?.[0]?.id?.toString() ?? "",
+            price: product?.price?.toString() ?? "0",
             status: "active",
-            description: "",
-            attributes: [],
-            attribute_values: [],
+            description: product?.description ?? "",
+            attributes: product?.attributes?.map(attr => ({
+                ...attr,
+                values: attr.values?.map(val => ({
+                    ...val,
+                    title: val.title ?? "",
+                    title_id: val.title_id ?? "",
+                    properties: val.properties ?? "",
+                    image: val.image ?? "",
+                })) ?? []
+            })) ?? [],
+            attribute_values: product?.attribute_values?.map(val => ({
+                ...val,
+                title: val.title ?? "",
+                title_id: val.title_id ?? "",
+                properties: val.properties ?? "",
+                image: val.image ?? "",
+            })) ?? [],
             descriptionState: initialValue,
-            product_variants: []
+            product_variants: product?.product_variants ?? []
         },
         mode: "onBlur",
         resolver: zodResolver(formSchema),
     });
 
-    const onSubmit = async (data: FormSchemaType) => {
+    useEffect(() => {
+        if (isEdit) {
+            setCompletedSteps(TabsData.map((t) => t.value))
+        }
+    }, [isEdit])
+
+    const handleCreateProduct = async (data: FormSchemaType) => {
         const response = await createProductAction(data)
         if (response?.success) {
-            toast.success("Tao san pham thanh cong");
+            toast.success("Tạo sản phẩm thành công")
             router.push("/san-pham")
         } else {
-            toast.error("Tao san pham that bai");
+            toast.error("Tạo sản phẩm thất bại")
+        }
+    }
+
+    const handleUpdateProduct = async (productId: string, data: FormSchemaType) => {
+        const response = await updateProductAction(productId, data)
+        console.log('data', data)
+        if (response?.success) {
+            toast.success("Cập nhật sản phẩm thành công")
+            router.push("/san-pham")
+        } else {
+            toast.error("Cập nhật sản phẩm thất bại")
         }
     }
 
@@ -98,6 +137,15 @@ export default function CreateProduct() {
         }
     }
 
+    const onSubmit = async (data: FormSchemaType) => {
+        if (isEdit && product) {
+            await handleUpdateProduct(product.id.toString(), data);
+        } else {
+            await handleCreateProduct(data);
+        }
+    };
+
+
     return (
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit, onError)}>
@@ -106,19 +154,22 @@ export default function CreateProduct() {
                     defaultValue={defaultValue}
                     className="w-full"
                     onValueChange={(value) => {
-                        if (value === activeTab || completedSteps.includes(value)) {
+                        if (isEdit || value === activeTab || completedSteps.includes(value)) {
                             setActiveTab(value)
                         }
                     }}
                 >
-                    <TabsList className={'bg-transparent border-b-[0.5px] border-line w-full justify-start rounded-none p-0 h-fit gap-3 mb-6'}>
+                    <TabsList className="bg-transparent border-b-[0.5px] border-line w-full justify-start rounded-none p-0 h-fit gap-3 mb-6">
                         {TabsData.map((tab) => (
                             <TabsTrigger
                                 key={tab.value}
                                 value={tab.value}
-                                className={'box-border px-0 pt-0 rounded-none text-base pb-2 font-normal data-[state=active]:font-semibold data-[state=active]:shadow-none data-[state=active]:border-b-[2px] data-[state=active]:border-primary'}
+                                disabled={!isEdit && !completedSteps.includes(tab.value) && tab.value !== activeTab}
+                                className="box-border px-0 pt-0 rounded-none text-base pb-2 font-normal
+                  data-[state=active]:font-semibold data-[state=active]:shadow-none
+                  data-[state=active]:border-b-[2px] data-[state=active]:border-primary"
                             >
-                                <div className={'p-3 rounded-xl hover:bg-muted'}>
+                                <div className="p-3 rounded-xl hover:bg-muted">
                                     <span>{tab.name}</span>
                                 </div>
                             </TabsTrigger>
@@ -127,7 +178,10 @@ export default function CreateProduct() {
 
                     {TabsData.map((tab) => (
                         <TabsContent key={tab.value} value={tab.value}>
-                            {tab.content({ onNextStep: handleNextStep, onPrevStep: handlePrevStep })}
+                            {tab.content({
+                                onNextStep: handleNextStep,
+                                onPrevStep: handlePrevStep,
+                            })}
                         </TabsContent>
                     ))}
                 </Tabs>

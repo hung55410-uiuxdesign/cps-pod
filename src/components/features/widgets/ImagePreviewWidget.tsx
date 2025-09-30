@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from "react"
 import {
     Carousel,
     CarouselContent,
@@ -8,32 +9,60 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 
-export function ImagePreviewWidget() {
+type Props = {
+    images: string[]
+    selectedImage?: string | null
+    onImageSelect?: (image: string) => void
+}
+
+export function ImagePreviewWidget({ images, selectedImage, onImageSelect }: Props) {
+    const [currentImage, setCurrentImage] = useState(images[0] ?? "")
+
+    useEffect(() => {
+        if (selectedImage && images.includes(selectedImage)) {
+            setCurrentImage(selectedImage)
+        }
+    }, [selectedImage, images])
+
+    const handleSelect = (img: string) => {
+        setCurrentImage(img)
+        onImageSelect?.(img)
+    }
+
     return (
-        <div className={'w-full flex flex-col gap-4'}>
-            <img
-                src={'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=1288&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
-                alt={'product'}
-                className={'w-full max-h-[650px] rounded-xl object-cover'}
-            />
-            <Carousel
-                opts={{
-                    align: "start",
-                }}
-                className="w-full group"
-            >
+        <div className="w-full flex flex-col gap-4">
+            {currentImage && (
+                <img
+                    src={currentImage}
+                    alt="product"
+                    className="w-full h-full max-h-[650px] rounded-xl object-cover"
+                />
+            )}
+
+            <Carousel opts={{ align: "start" }} className="w-full group">
                 <CarouselContent>
-                    {Array.from({ length: 5 }).map((_, index) => (
+                    {images.map((img, index) => (
                         <CarouselItem key={index} className="basis-1/4">
-                            <div className="p-1 border-[0.5px] border-line rounded-xl h-[100px] flex items-center justify-center">
-                                <p>{index}</p>
+                            <div
+                                onClick={() => handleSelect(img)}
+                                className={`p-1 border-[0.5px] rounded-xl h-[100px] flex items-center justify-center cursor-pointer ${
+                                    img === currentImage
+                                        ? "border-primary"
+                                        : "border-line hover:border-primary/50"
+                                }`}
+                            >
+                                <img
+                                    src={img}
+                                    alt={`thumb-${index}`}
+                                    className="h-full w-full object-cover rounded-lg"
+                                />
                             </div>
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <div className={'hidden group-hover:flex'}>
-                    <CarouselPrevious className={'left-0'} />
-                    <CarouselNext className={'right-0'} />
+                <div className="hidden group-hover:flex">
+                    <CarouselPrevious className="left-0" />
+                    <CarouselNext className="right-0" />
                 </div>
             </Carousel>
         </div>

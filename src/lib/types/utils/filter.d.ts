@@ -37,3 +37,12 @@ export type ProductFilterPayload = {
     sortOrder?: "asc" | "desc";
     view?: ProductListView;
 };
+
+export type GetProductsParams = {
+    page?: number
+    per_page?: number
+    category?: string
+    search?: string
+    sortBy?: string
+    sortOrder?: "asc" | "desc"
+}

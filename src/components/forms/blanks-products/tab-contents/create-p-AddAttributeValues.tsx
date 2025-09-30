@@ -74,7 +74,8 @@ export default function CreatePAddAttributeValues({ attrIndex }: Props) {
                                                 <Input
                                                     placeholder="Nhập giá trị"
                                                     {...field}
-                                                    className={'rounded-xl w-full border-[0.5px] border-line shadow-none h-11'}
+                                                    value={field.value ?? ""}
+                                                    className="rounded-xl w-full border-[0.5px] border-line shadow-none h-11"
                                                 />
                                             </DialogTrigger>
                                             <DialogContent className={'w-full min-w-[650px] rounded-xl'}>

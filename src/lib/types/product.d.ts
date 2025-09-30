@@ -1,7 +1,8 @@
 import {PaginationType} from "@/lib/types/utils/pagination";
+import {CategoryType} from "@/lib/types/category";
 
 export type AttributeType = {
-    id: number
+    id: string
     name: string
     values: AttributeValueType[]
 }
@@ -12,6 +13,7 @@ export type AttributeValueType = {
     title_id: string
     prop_name: string
     properties: string
+    image: string
 }
 
 export type ProductVariantAttributeType = {
@@ -71,6 +73,7 @@ export type ProductType = {
     state: string
     stock: number
     created_at: string
+    categories: CategoryType[]
 }
 
 export type ProductListType = {

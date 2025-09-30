@@ -60,7 +60,7 @@ export default async function Page() {
                     </Button>
                 </div>
             </div>
-            <ProductList data={data} />
+            <ProductList />
         </div>
     )
 }

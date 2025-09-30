@@ -34,7 +34,7 @@ export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction
     const attributes_value = extractAttributeValues(attributes);
 
     const handleNext = async () => {
-        const isStepValid = await trigger(["attributes"]);
+        const isStepValid = await trigger([]);
         setValue("attribute_values", attributes_value);
         if(isStepValid && onNextStepAction) onNextStepAction();
     };

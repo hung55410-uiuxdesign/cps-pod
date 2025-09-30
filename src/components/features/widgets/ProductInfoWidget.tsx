@@ -6,19 +6,17 @@ import {RenderSelectWidget} from "@/components/features/widgets/RenderSelectWidg
 import { useState } from "react";
 import {QuantitySelectWidget} from "@/components/features/widgets/QuantitySelectWidget";
 import {Button} from "@/components/ui/button";
-import {Heart, Share2, ShoppingCart} from "lucide-react";
+import {Edit2, Heart, Share2, ShoppingCart} from "lucide-react";
 import {ProductType} from "@/lib/types/product";
+import Link from "next/link";
 
 type Props = {
     product: ProductType;
+    onImageSelect?: (url: string) => void
 }
 
-export function ProductInfoWidget({product}: Props) {
-    const [selectedSizes, setSelectedSizes] = useState<string[]>([])
-    const [selectedColor, setSelectedColor] = useState<string[]>([])
-    const [selectedPrintArea, setSelectedPrintArea] = useState<string[]>([])
-
-    console.log('data', product)
+export function ProductInfoWidget({product, onImageSelect}: Props) {
+    const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string[] }>({})
 
     return (
         <div className={'w-full flex flex-col gap-8'}>
@@ -57,53 +55,64 @@ export function ProductInfoWidget({product}: Props) {
                 {/*<p className={'text-tx-disabled line-through'}>150,000 VNĐ</p>*/}
             </div>
             <Separator />
-            <RenderSelectWidget
-                title="Size"
-                type="default"
-                multiple={false}
-                options={[
-                    { id: "s", label: "S", value: "s" },
-                    { id: "m", label: "M", value: "m" },
-                    { id: "l", label: "L", value: "l" },
-                ]}
-                selected={selectedSizes}
-                onChange={setSelectedSizes}
-            />
 
             <RenderSelectWidget
-                title="Color"
-                type="color"
                 multiple={false}
-                options={[
-                    { id: "1", label: "Red", value: "red", colorHex: "#E62727" },
-                    { id: "2", label: "Blue", value: "blue", colorHex: "#3396D3" },
-                ]}
-                selected={selectedColor}
-                onChange={setSelectedColor}
+                options={product.attributes}
+                selected={selectedAttributes}
+                onChange={setSelectedAttributes}
+                onImageSelect={onImageSelect}
             />
-            <RenderSelectWidget
-                title="Vùng in"
-                type="default"
-                multiple={true}
-                options={[
-                    { id: "1", label: "Red", value: "red", colorHex: "#f87171" },
-                    { id: "2", label: "Blue", value: "blue", colorHex: "#60a5fa" },
-                    { id: "3", label: "Yellow", value: "Yellow", colorHex: "#60a5fa" },
-                    { id: "4", label: "Green", value: "green", colorHex: "#60a5fa" },
-                ]}
-                selected={selectedPrintArea}
-                onChange={setSelectedPrintArea}
-            />
-            <QuantitySelectWidget />
+
+            {/*<RenderSelectWidget*/}
+            {/*    title="Size"*/}
+            {/*    type="default"*/}
+            {/*    multiple={false}*/}
+            {/*    options={[*/}
+            {/*        { id: "s", label: "S", value: "s" },*/}
+            {/*        { id: "m", label: "M", value: "m" },*/}
+            {/*        { id: "l", label: "L", value: "l" },*/}
+            {/*    ]}*/}
+            {/*    selected={selectedSizes}*/}
+            {/*    onChange={setSelectedSizes}*/}
+            {/*/>*/}
+
+            {/*<RenderSelectWidget*/}
+            {/*    title="Color"*/}
+            {/*    type="color"*/}
+            {/*    multiple={false}*/}
+            {/*    options={[*/}
+            {/*        { id: "1", label: "Red", value: "red", colorHex: "#E62727" },*/}
+            {/*        { id: "2", label: "Blue", value: "blue", colorHex: "#3396D3" },*/}
+            {/*    ]}*/}
+            {/*    selected={selectedColor}*/}
+            {/*    onChange={setSelectedColor}*/}
+            {/*/>*/}
+            {/*<RenderSelectWidget*/}
+            {/*    title="Vùng in"*/}
+            {/*    type="default"*/}
+            {/*    multiple={true}*/}
+            {/*    options={[*/}
+            {/*        { id: "1", label: "Red", value: "red", colorHex: "#f87171" },*/}
+            {/*        { id: "2", label: "Blue", value: "blue", colorHex: "#60a5fa" },*/}
+            {/*        { id: "3", label: "Yellow", value: "Yellow", colorHex: "#60a5fa" },*/}
+            {/*        { id: "4", label: "Green", value: "green", colorHex: "#60a5fa" },*/}
+            {/*    ]}*/}
+            {/*    selected={selectedPrintArea}*/}
+            {/*    onChange={setSelectedPrintArea}*/}
+            {/*/>*/}
+            {/*<QuantitySelectWidget />*/}
 
             <div className={'flex flex-row gap-4'}>
-                <Button
-                    variant={'default'}
-                    className={'w-full h-10 rounded-xl'}
-                >
-                    <ShoppingCart />
-                    Add to cart
-                </Button>
+                <Link href={`/san-pham/${product.id}/chinh-sua`} className={'w-full'}>
+                    <Button
+                        variant={'default'}
+                        className={'w-full h-10 rounded-xl'}
+                    >
+                        <Edit2 />
+                        Chỉnh sửa
+                    </Button>
+                </Link>
                 <Button
                     size={"icon"}
                     variant={"outline"}
