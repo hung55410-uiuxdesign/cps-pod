@@ -33,7 +33,11 @@ export default function CreatePAddAttributeValues({ attrIndex }: Props) {
     const images: string[] = watch("images");
 
     const handleSelectImage = (image: string, index: number) => {
-        setValue(`attributes.${attrIndex}.values.${index}.image`, image);
+        setValue(`attributes.${attrIndex}.values.${index}.image`, image, {
+            shouldDirty: true,
+            shouldTouch: true,
+            shouldValidate: true,
+        });
     }
 
     const { fields: valueFields, append: appendValue, remove: removeValue } = useFieldArray({
@@ -84,19 +88,21 @@ export default function CreatePAddAttributeValues({ attrIndex }: Props) {
 
                                                 <ScrollArea className={'h-[400px] w-full'}>
                                                     <div className={'grid grid-cols-4 w-full gap-4'}>
-                                                        {images.length > 0 && images.map((image, index) => (
-                                                            <div
-                                                                key={index}
-                                                                className={`w-full max-h-[220px] rounded-xl overflow-hidden cursor-pointer transition-all border-2 
-                                                                ${field.value === image ? 'border-primary' : 'border-transparent hover:border-gray-300'}`}
-                                                                onClick={() => handleSelectImage(image, index)}
-                                                            >
-                                                                <img src={image} className={'w-full h-full object-cover'}/>
-                                                            </div>
-                                                        ))}
+                                                        {images.map((image, index) => {
+                                                            const isSelected = field.value === image;
+                                                            return (
+                                                                <div
+                                                                    key={index}
+                                                                    className={`w-full max-h-[220px] rounded-xl overflow-hidden cursor-pointer transition-all border-2 
+                                                                            ${isSelected ? 'border-primary' : 'border-transparent hover:border-gray-300'}`}
+                                                                    onClick={() => handleSelectImage(image, index)}
+                                                                >
+                                                                    <img src={image} className="w-full h-full object-cover" />
+                                                                </div>
+                                                            );
+                                                        })}
                                                     </div>
                                                 </ScrollArea>
-
 
                                                 <DialogFooter>
                                                     <DialogClose asChild>

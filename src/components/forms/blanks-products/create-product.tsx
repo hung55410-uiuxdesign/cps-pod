@@ -11,7 +11,6 @@ import {createProductAction} from "@/lib/data/actions/product-actions";
 
 import { useRouter } from "next/navigation"
 import {toast} from "sonner";
-import {showToast} from "@/lib/constants/ui/toast";
 
 const initialValue = {
     root: {
@@ -71,7 +70,6 @@ export default function CreateProduct() {
         const response = await createProductAction(data)
         if (response?.success) {
             toast.success("Tao san pham thanh cong");
-            console.log(response)
             router.push("/san-pham")
         } else {
             toast.error("Tao san pham that bai");

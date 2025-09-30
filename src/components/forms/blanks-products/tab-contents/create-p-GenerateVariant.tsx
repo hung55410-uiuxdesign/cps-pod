@@ -20,6 +20,7 @@ import {
     ProductVariantSchemaType
 } from "@/lib/types/forms/create-product-form-schema";
 import {generateVariants, mergeVariants} from "@/lib/helpers/generate-variants-helper";
+import Empty from "@/components/utils/Empty";
 
 type Props = {
     onNextStepAction?: () => void;
@@ -77,16 +78,28 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
         return result;
     }, [products_variants, search, filters]);
 
-    const groupedVariants = useMemo(() => {
-        if (!groupBy) return { all: filteredVariants };
 
-        const groups: Record<string, ProductVariantSchemaType[]> = {};
+    const groupedVariants = useMemo(() => {
+        const groups: Record<
+            string,
+            {
+                items: ProductVariantSchemaType[]
+                image: string
+            }
+        > = {};
         filteredVariants.forEach((variant) => {
-            const attr = variant.attributes.find((a) => a.attribute_name === groupBy);
-            const key = attr?.value ?? "Khác";
-            if (!groups[key]) groups[key] = [];
-            groups[key].push(variant);
-        });
+            const attr = variant.attributes.find((a) => a.attribute_name === groupBy)
+            const key = attr?.value ?? "Khác"
+
+            if (!groups[key]) {
+                groups[key] = {
+                    items: [],
+                    image: attr?.image ?? "",
+                }
+            }
+
+            groups[key].items.push(variant)
+        })
         return groups;
     }, [filteredVariants, groupBy]);
 
@@ -227,7 +240,16 @@ export default function CreatePGenerateVariant({onNextStepAction, onPrevStepActi
                         </div>
                     )}
 
-                    {products_variants.length === 0 && <p>Chưa có thuộc tính nào</p>}
+                    {products_variants.length === 0 && (
+                        <Empty
+                            title="Chưa có thuộc tính"
+                            caption="Hãy thêm thuộc tính đầu tiên của bạn."
+                            action={{
+                                label: "Tạo thuộc tính",
+                                onClick: handlePreStep,
+                            }}
+                        />
+                    )}
 
                     <div className={'w-full grid grid-cols-2 gap-3 bg-muted px-6 py-3 border-b-[0.5px] border-line'}>
                         <div className={'flex flex-row items-center gap-2'}>

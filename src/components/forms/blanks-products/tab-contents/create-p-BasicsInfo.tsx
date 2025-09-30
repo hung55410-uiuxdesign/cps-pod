@@ -4,10 +4,6 @@ import {InputFieldWidgets} from "@/components/features/widgets/InputFieldWidgets
 import {Button} from "@/components/ui/button"
 import {FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form"
 import {useFormContext} from "react-hook-form";
-import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,} from "@/components/ui/command"
-import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
-import {cn} from "@/lib";
-import {Check, ChevronsUpDown} from "lucide-react";
 import {Separator} from "@/components/ui/separator";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"
 import {
@@ -17,29 +13,18 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import {ProductVariantSchemaType} from "@/lib/types/forms/create-product-form-schema";
+import {FormSchemaType, ProductVariantSchemaType} from "@/lib/types/forms/create-product-form-schema";
 import {useEffect, useState } from "react";
 import {showToast} from "@/lib/constants/ui/toast";
+import {SelectCategory} from "@/components/forms/fields/select-category";
 
 type Props = {
     onNextStepAction?: () => void;
     onPrevStepAction?: () => void;
 };
 
-const categories = [
-    { label: "English", id: "en" },
-    { label: "French", id: "fr" },
-    { label: "German", id: "de" },
-    { label: "Spanish", id: "es" },
-    { label: "Portuguese", id: "pt" },
-    { label: "Russian", id: "ru" },
-    { label: "Japanese", id: "ja" },
-    { label: "Korean", id: "ko" },
-    { label: "Chinese", id: "zh" },
-] as const
-
 export default function CreatePBasicsInfo({ onNextStepAction }: Props) {
-    const { control, trigger, setValue, watch } = useFormContext();
+    const { control, trigger, setValue, watch } = useFormContext<FormSchemaType>();
 
     const images: string[] = watch('images') || [];
     const variants: ProductVariantSchemaType[] = watch("product_variants") || [];
@@ -158,69 +143,7 @@ export default function CreatePBasicsInfo({ onNextStepAction }: Props) {
                         )}
                     />
 
-                    <FormField
-                        control={control}
-                        name="category_id"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-col gap">
-                                <FormLabel>Danh mục:</FormLabel>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant="outline"
-                                                role="combobox"
-                                                className={cn(
-                                                    "h-11 rounded-xl justify-between",
-                                                    !field.value && "text-muted-foreground"
-                                                )}
-                                            >
-                                                {field.value
-                                                    ? categories.find(
-                                                        (cate) => cate.id === field.value
-                                                    )?.label
-                                                    : "Chọn danh mục"}
-                                                <ChevronsUpDown className="opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent align={"start"} className="p-0 shadow-2xl overflow-hidden border-[0.5px] border-line rounded-xl">
-                                        <Command>
-                                            <CommandInput
-                                                placeholder="Tìm danh mục..."
-                                                className="h-11"
-                                            />
-                                            <CommandList>
-                                                <CommandEmpty>No framework found.</CommandEmpty>
-                                                <CommandGroup>
-                                                    {categories.map((cate) => (
-                                                        <CommandItem
-                                                            value={cate.label}
-                                                            key={cate.id}
-                                                            onSelect={() => {
-                                                                setValue("category_id", cate.id)
-                                                            }}
-                                                        >
-                                                            {cate.label}
-                                                            <Check
-                                                                className={cn(
-                                                                    "ml-auto",
-                                                                    cate.id === field.value
-                                                                        ? "opacity-100"
-                                                                        : "opacity-0"
-                                                                )}
-                                                            />
-                                                        </CommandItem>
-                                                    ))}
-                                                </CommandGroup>
-                                            </CommandList>
-                                        </Command>
-                                    </PopoverContent>
-                                </Popover>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    <SelectCategory control={control} setValueAction={setValue} />
 
                     <FormField
                         control={control}

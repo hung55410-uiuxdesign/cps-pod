@@ -17,6 +17,7 @@ export function generateVariants(
             attribute_name: attr.name,
             value: val.title,
             value_id: val.title_id || val.title,
+            image: val.image || "",
         }))
     )
 

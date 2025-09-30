@@ -27,6 +27,7 @@ const ProductVariantAttributeSchema = z.object({
     value_id: z.string(),
     attribute_id: z.string().optional(),
     attribute_name: z.string(),
+    image: z.string().optional(),
 })
 
 const ProductVariantSchema = z.object({

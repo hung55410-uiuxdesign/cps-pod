@@ -14,6 +14,7 @@ import {InputFieldWidgets} from "@/components/features/widgets/InputFieldWidgets
 import CreatePAddAttributeValues from "@/components/forms/blanks-products/tab-contents/create-p-AddAttributeValues";
 import Empty from "@/components/utils/Empty";
 import {extractAttributeValues} from "@/lib/helpers/extract-attributes-values";
+import {Plus, Trash2} from "lucide-react";
 
 type Props = {
     onNextStepAction?: () => void;
@@ -48,16 +49,11 @@ export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction
                 <div className="flex flex-row gap-3 items-center justify-between bg-muted p-3 border-b-[0.5px] border-line">
                     <p className="font-semibold text-tx-default">Thuộc tính</p>
                     <Button
-                        className="h-10 rounded-xl"
+                        className="h-10 rounded-xl opacity-0"
                         type="button"
-                        onClick={() =>
-                            appendAttribute({
-                                id: Date.now().toString(),
-                                name: "",
-                                values: []
-                            })
-                        }
+                        variant={'ghost'}
                     >
+                        <Plus />
                         Thêm thuộc tính
                     </Button>
                 </div>
@@ -85,9 +81,10 @@ export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction
                                     <Button
                                         type="button"
                                         variant="outline"
-                                        className="rounded-xl h-10 max-w-[250px]"
+                                        className="rounded-xl w-fit h-10 max-w-[250px]"
                                         onClick={() => removeAttribute(attrIndex)}
                                     >
+                                        <Trash2 />
                                         Xóa thuộc tính
                                     </Button>
                                 </div>
@@ -100,7 +97,13 @@ export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction
                             caption="Hãy thêm thuộc tính đầu tiên của bạn."
                             action={{
                                 label: "Tạo Attribute",
-                                onClick: () => console.log("Create attribute clicked"),
+                                onClick: () => {
+                                    appendAttribute({
+                                        id: Date.now().toString(),
+                                        name: "",
+                                        values: []
+                                    })
+                                },
                             }}
                         />
                     )}
@@ -117,6 +120,7 @@ export default function CreatePAddAttributes({onNextStepAction, onPrevStepAction
                             })
                         }
                     >
+                        <Plus />
                         Thêm thuộc tính
                     </Button>
                 </div>

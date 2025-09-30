@@ -15,6 +15,7 @@ type ProductVariant = {
     price: string
     attributes: VariantAttribute[]
     idx?: number
+    image?: string
 }
 
 type GroupedVariantProps = {
@@ -22,9 +23,10 @@ type GroupedVariantProps = {
     variants: ProductVariant[]
     isLast?: boolean
     onUpdateVariant: (index: number, price: string) => void
+    image?: string
 }
 
-function GroupedVariant({ groupName, variants, isLast, onUpdateVariant }: GroupedVariantProps) {
+function GroupedVariant({ groupName, variants, isLast, onUpdateVariant, image }: GroupedVariantProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [checked, setChecked] = useState(false)
 
@@ -37,7 +39,11 @@ function GroupedVariant({ groupName, variants, isLast, onUpdateVariant }: Groupe
                         className="flex flex-row gap-2 w-full font-medium text-tx-default"
                         onClick={() => setIsOpen(prev => !prev)}
                     >
-                        <div className="w-14 h-14 rounded-xl border-[0.5px] border-line mg-muted"></div>
+                        <div className="w-14 h-14 rounded-xl border-[0.5px] border-line mg-muted overflow-hidden">
+                            {image && (
+                                <img src={image} className={'w-full h-full object-cover'} alt={image} />
+                            )}
+                        </div>
                         <div className="flex flex-col">
                             <p>{groupName}</p>
                             <Button variant="link" className="p-0 text-tx-muted cursor-pointer">
@@ -62,7 +68,11 @@ function GroupedVariant({ groupName, variants, isLast, onUpdateVariant }: Groupe
                         >
                             <div className="flex flex-row gap-2 items-center">
                                 <Checkbox />
-                                <div className="w-11 h-11 rounded-xl border-[0.5px] border-line mg-muted"></div>
+                                <div className="w-11 h-11 rounded-xl border-[0.5px] border-line mg-muted overflow-hidden">
+                                    {image && (
+                                        <img src={image} className={'w-full h-full object-cover'} alt={image} />
+                                    )}
+                                </div>
                                 {variant.attributes.map((attr, aIdx) => (
                                     <span key={aIdx} className="text-sm font-medium">
                     {attr.value}
@@ -88,7 +98,13 @@ function GroupedVariant({ groupName, variants, isLast, onUpdateVariant }: Groupe
 }
 
 type AccordionProps = {
-    groupedVariants: Record<string, ProductVariant[]>
+    groupedVariants: Record<
+        string,
+        {
+            items: ProductVariant[]
+            image: string
+        }
+    >
     onUpdateVariant: (index: number, price: string) => void
 }
 
@@ -97,11 +113,12 @@ export default function CustomAccordion({ groupedVariants, onUpdateVariant }: Ac
 
     return (
         <div className="w-full">
-            {entries.map(([groupName, variants], idx) => (
+            {entries.map(([groupName, group], idx) => (
                 <GroupedVariant
                     key={groupName}
                     groupName={groupName}
-                    variants={variants}
+                    variants={group.items}
+                    image={group.image}
                     isLast={idx === entries.length - 1}
                     onUpdateVariant={onUpdateVariant}
                 />
